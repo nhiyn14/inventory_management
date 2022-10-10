@@ -1,0 +1,13 @@
+/* Created with https://www.css-gradient.com
+.app {
+  background: #2D18FF;
+  background: -webkit-linear-gradient(top left, #2D18FF, #ACE4FF);
+  background: -moz-linear-gradient(top left, #2D18FF, #ACE4FF);
+  background: linear-gradient(to bottom right, #2D18FF, #ACE4FF);
+} */
+.app {
+  background-color: #CCCCCC;
+}
+footer {
+  background-color: #CCCCCC;
+}
