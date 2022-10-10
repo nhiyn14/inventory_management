@@ -1,0 +1,57 @@
+
+.container{
+    display: flex;
+    justify-content: center;
+}
+
+.formContents {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 600px;
+    height: 600px;
+    background-color: rgb(255, 255, 255);
+    border: 2px solid rgb(254, 214, 214);
+    border-radius: 15%;
+    margin-top: 230px;
+    
+}
+.registrationDetail {
+    height: 225px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.registrationInputs {
+    display: flex;
+    flex-direction: column;
+    
+}
+.emailInput {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+.passwordInput {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+.confirmPasswordInput {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+.registrationName {
+    padding-bottom: 15px;
+}
+.registrationButton {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 10px;
+}
+.registrationInputs > p {
+    color: blue;
+    padding-left: 106px;
+
+}
+.registrationInputs > h1 {
+    padding-left: 19px;
+    
+}

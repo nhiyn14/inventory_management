@@ -1,0 +1,128 @@
+body {
+    background: rgb(65, 114, 159);
+    background: linear-gradient(0deg, rgba(65, 114, 159, 1) 0%, rgba(195, 224, 229, 1) 100%);
+}
+
+.registrationContainer {
+    max-width: fit-content;
+    display: flex;
+    justify-content: right;
+    padding-left: 135px;
+    padding: 100px;
+}
+
+.welcomeText {
+    padding-right: 300px;
+    padding-top: 300px;
+    padding-left: 190px;
+
+}
+
+.welcomeText>h1 {
+    font-size: 40px;
+
+}
+
+.welcomeText>p {
+    color: white;
+    font-size: 25px;
+}
+
+.registrationFormContents {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 500px;
+    height: 450px;
+    background-color: rgb(255, 255, 255);
+    border: 2px solid rgb(228, 228, 228);
+    border-radius: 10px;
+    -webkit-box-shadow: 0px 0px 23px 1px #000000;
+    box-shadow: 0px 0px 23px 1px #000000;
+    margin-top: 235px;
+    padding-bottom: 0px;
+
+}
+
+.registrationDetail {
+    height: 275px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.registrationInputs {
+    display: flex;
+    flex-direction: column;
+    width: 75%;
+
+}
+
+.emailInput {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.passwordInput {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.confirmedPasswordInput {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.nameInput {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.lastnameInput {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.registrationButton {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 10px;
+}
+
+.registrationInputs>p {
+    color: blue;
+    margin: 0 auto;
+    text-align: center;
+
+}
+
+.registrationButton {
+    padding-top: 30px;
+}
+
+.routeLink {
+    padding-bottom: 25px;
+}
+
+header {
+    display: flex;
+    width: 100%;
+    height: 80px;
+    background-color: #cccccc;
+    border-bottom: 2px solid white;
+    box-shadow: 5px 5px 5px gold;
+    
+
+}
+
+header>h1 {
+    padding-top: 15px;
+    padding-left: 15px;
+}
+
+footer {
+    width: 100%;
+    height: 80px;
+    background-color: #cccccc;
+    -webkit-box-shadow: 4px -16px 38px 14px rgba(0, 0, 0, 0.55);
+    box-shadow: 4px -16px 38px 14px rgba(0, 0, 0, 0.55);
+}
