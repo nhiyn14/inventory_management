@@ -3,58 +3,74 @@ import React, { useState } from "react";
 import "./LoginUI.css";
 import Button from "@mui/material/Button";
 import Input from "@mui/material/Input";
-import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Link, json } from "react-router-dom";
 import { StyledEngineProvider, TextField } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 
-import CircularProgress from '@mui/material/CircularProgress';
 const axios = require("axios").default;
 var _ = require("lodash");
+const token = sessionStorage.getItem("token")
+console.log("this is your token", token);
 
 const url = "https://jsonplaceholder.typicode.com/posts";
 
 export default function LoginUI() {
-    const [isLoading, setIsLoading] = useState(false)
-    const [emailError, setEmailError] = useState(false)
-    const [passwordError, setPasswordError] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
+    const [emailError, setEmailError] = useState(false);
+    const [passwordError, setPasswordError] = useState(false);
     const [loginValues, setLoginValues] = useState({
         email: "",
         password: "",
     });
 
     const submitHandler = (e) => {
-        const url = "https://jsonplaceholder.typicode.com/posts";
+        const url = "http://127.0.0.1:5000/login";
         const headers = {};
         e.preventDefault();
-        
-        loginValues.email === '' ? setEmailError(true) : setEmailError(false)
-        loginValues.password === '' ? setPasswordError(true) : setPasswordError(false)
-        axios.post(url, loginValues).then(function (response) {
+        loginValues.email === "" ? setEmailError(true) : setEmailError(false);
+        loginValues.password === ""
+            ? setPasswordError(true)
+            : setPasswordError(false);
 
-            response.status === 201 ? setIsLoading(true) : setIsLoading(false)
-            console.log(response);
-        });
-        setLoginValues({
-            email: "",
-            password: "",
-        });
+        axios
+            .post(url, { loginValues })
+            .then(function (response) {
+                // response.status === 201 ? setIsLoading(true) : setIsLoading(false)
+                // response.status === 200 ? setIsLoading(true) : setIsLoading(false)
+                console.log(response);
+                console.log("this came from the  backend:", response.data);
+                sessionStorage.setItem("token", response.data.access_token)
+            })
+            .catch((error) => {
+                console.log("Sorry champ, you're error is:", error);
+            });
+        // response.status === 201 ? setIsLoading(true) : setIsLoading(false)
+        // console.log(response);
+
+        // setLoginValues({
+        //     email: "",
+        //     password: "",
+        // });
     };
     return (
         <div>
+            
             <header>
                 <AssessmentIcon sx={{ fontSize: 80 }} />
                 <h1>StockTake.</h1>
-                {isLoading === true ? <CircularProgress className="loadingBar" size={80}/> : null}
+                {isLoading === true ? (
+                    <CircularProgress className="loadingBar" size={80} />
+                ) : null}
             </header>
-        
-            <body >
-            
+
+            <body>
                 <div className="registrationContainer">
                     <div className="welcomeText">
                         <h1>Welcome to StockTake</h1>
                         <p>Where all your hopes and dreams come true</p>
                         <p> Please register your details </p>
                     </div>
-                
+                    {(token && token != "" && token != undefined) ? "you have successfully logged" :
                     <form className="registrationFormContents">
                         <div className="registrationInputs">
                             <div className="registrationDetail">
@@ -93,6 +109,7 @@ export default function LoginUI() {
                                         error={passwordError}
                                     />
                                 </div>
+                                
                             </div>
                             <div className="registrationButton">
                                 <Button
@@ -108,6 +125,7 @@ export default function LoginUI() {
                             </p>
                         </div>
                     </form>
+                    }
                 </div>
             </body>
             <footer></footer>
