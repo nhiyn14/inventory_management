@@ -2,6 +2,8 @@
 """
 module for the beginning of greatness
 """
+import hashlib
+import pydash
 from flask import jsonify, Flask, Blueprint, request, abort
 from flask_cors import CORS
 import json
@@ -19,11 +21,6 @@ def errorHandler(e):
     return jsonify(error='Not found'), 404
 
 
-@app.route('/')
-def index():
-    return jsonify({'hello': 'there'})
-
-
 @app.route('/registration', methods=['GET'])
 def get_registration():
     # should i hash the password and store in db here?
@@ -37,26 +34,34 @@ def post_registration():
     """gets registration information"""
     regData = request.get_json()
     regList.append(regData)
+    regDict = regData['registrationValues']
+    email = regDict['email']
+    password = regDict['password']
+    hashedPassword = hashlib.md5(password.encode())
     return jsonify(regList)
 
 
-@app.route('/registration', methods=['GET'])
-def get_registration():
-    # should i hash the password and store in db here?
-    """gets registration information"""
+@app.route('/login', methods=['GET'])
+def get_login():
+    """gets login information"""
     return jsonify(loginList)
 
 
-@app.route('/registration', methods=['POST'])
-def post_registration():
-    # should i hash the password and store in db here?
+@app.route('/login', methods=['POST'])
+def post_login():
     """gets registration information"""
     loginData = request.get_json()
+    loginDict = loginData['loginValues']
+    password = loginDict['password']
+    # compare password with db
     loginList.append(loginData)
-    return jsonify(regList)
+    return jsonify(loginList)
 
 
-
+@app.route('/dashboard', methods=['POST'])
+def post_dashboard():
+    """posts data from dashboard form"""
+    dashboardData = request.get_json()
 
 
 if __name__ == "__main__":
