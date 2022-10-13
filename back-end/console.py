@@ -11,13 +11,13 @@ from models.user import User
 import shlex
 
 
-classes = {"Product": Product, "User": User,
+classes = {"BaseModel": BaseModel, "Product": Product, "User": User,
            "Order": Order, "OrderDetail": OrderDetail}
 
 
 class ConsoleCommand(cmd.Cmd):
     """The Console"""
-    prompt = 'Welcome to The Console of Stock Take Inventory\n'
+    prompt = '(stock_inventory)\n'
 
     def do_EOF(self, arg):
         """Exits console"""
@@ -65,6 +65,7 @@ class ConsoleCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return False
         print(instance.id)
+        print(instance)
         instance.save()
 
     def do_show(self, arg):
@@ -94,8 +95,8 @@ class ConsoleCommand(cmd.Cmd):
             if len(args) > 1:
                 key = args[0] + "." + args[1]
                 if key in models.storage.all():
-                    models.storage.all().pop(key)
-                    models.storage.save()
+                    model = classes[args[0]]
+                    models.storage.delete(model, args[1])
                 else:
                     print("** no instance found **")
             else:
