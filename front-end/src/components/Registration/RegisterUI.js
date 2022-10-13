@@ -4,11 +4,14 @@ import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
 import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
 import AssessmentIcon from '@mui/icons-material/Assessment';
+import { CircularProgress } from '@mui/material';
+ 
+
 
 const axios = require("axios").default;
 var _ = require("lodash");
 
-const url = "https://jsonplaceholder.typicode.com/posts";
+
 
 export default function RegisterUI() {
     const [isLoading, setIsLoading] = useState(false)
@@ -21,8 +24,7 @@ export default function RegisterUI() {
     });
 
     const submitHandler = (e) => {
-        const url = "https://jsonplaceholder.typicode.com/posts";
-        const headers = {};
+        const url = "http://127.0.0.1:5000/registration";
         e.preventDefault();
 
         axios.post(url, registrationValues).then(function (response) {

@@ -2,44 +2,17 @@ import RegisterUI from "./components/Registration/RegisterUI";
 import LoginUI from "./components/Login/LoginUI";
 import "./App.css";
 import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
-
-const DUMMY_DATA = [
-    {
-        description: "candle",
-        product_id: "345",
-        retail_price: "$453",
-        product_status: "low",
-        total_sales: "45000",
-    },
-    {
-        description: "candle",
-        product_id: "3412",
-        retail_price: "$432153",
-        product_status: "low",
-        total_sales: "454310",
-    },
-    {
-        description: "candle",
-        product_id: "34542",
-        retail_price: "$42",
-        product_status: "low",
-        total_sales: "4542130",
-    },
-    {
-        description: "candle",
-        product_id: "345",
-        retail_price: "$453",
-        product_status: "low",
-        total_sales: "123546",
-    },
-];
+import Header from "./components/Dashboard/Header";
+import DashboardMenu from "./components/Dashboard/DashboardMenu";
+import DashboardForm from "./components/Dashboard/DashboardForm"
 
 function App() {
     return (
         <BrowserRouter>
             <Routes>
-              <Route path = '/' element={<RegisterUI/>}></Route>
-              <Route path = '/login' element={<LoginUI/>}></Route>
+                <Route path="/registration" element={<RegisterUI />}></Route>
+                <Route path="/login" element={<LoginUI />}></Route>
+                <Route path="/dashboard" element={<DashboardMenu/>}></Route>
             </Routes>
         </BrowserRouter>
     );

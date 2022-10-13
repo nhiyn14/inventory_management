@@ -1,6 +1,9 @@
-body {
+/* body {
     background: rgb(65, 114, 159);
     background: linear-gradient(0deg, rgba(65, 114, 159, 1) 0%, rgba(195, 224, 229, 1) 100%);
+} */
+body{
+background-image: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12);
 }
 
 .registrationContainer {
@@ -109,7 +112,7 @@ header {
     height: 80px;
     background-color: #cccccc;
     border-bottom: 2px solid white;
-    box-shadow: 5px 5px 5px gold;
+
     
 
 }
