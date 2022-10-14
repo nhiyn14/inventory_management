@@ -59,6 +59,7 @@ class ConsoleCommand(cmd.Cmd):
             print("** class name missing **")
             return False
         if args[0] in classes:
+            
             new_dict = self._key_value_parser(args[1:])
             instance = classes[args[0]](**new_dict)
         else:
@@ -78,7 +79,7 @@ class ConsoleCommand(cmd.Cmd):
             if len(args) > 1:
                 key = args[0] + "." + args[1]
                 if key in models.storage.all():
-                    print(models.storage.all()[key])
+                    print(models.storage.get(classes[args[0]], args[1]))
                 else:
                     print("** no instance found **")
             else:
@@ -121,6 +122,36 @@ class ConsoleCommand(cmd.Cmd):
         print(", ".join(obj_list), end="")
         print("]")
 
+    def do_update(self, arg):
+        """Update an instance based on the class name, id, attribute & value"""
+        args = shlex.split(arg)
+        if len(args) == 0:
+            print("** class name missing **")
+        elif args[0] in classes:
+            if len(args) > 1:
+                key = args[0] + "." + args[1]
+                if key in models.storage.all():
+                    if len(args) > 2:
+                        if "=" in args[2]:
+                            new = args[2].split('=')
+                            key_extra = "'" + new[0] + "':"
+                            if key_extra in str(models.storage.get(classes[args[0]], args[1])):
+                                key = new[0]
+                                value = new[1]
+                                model = classes[args[0]]
+                                models.storage.update(model, args[1], key, value)
+                            else:
+                                print("** key doesn't exist **")
+                        else:
+                            print("** incorrect format for attribute & value **")
+                    else:
+                        print("** atrribure & value missing **")
+                else:
+                    print("** no instance found **")
+            else:
+                print("** instance id missing **")
+        else:
+            print("** class doesn't exist **")
 
 if __name__ == '__main__':
     ConsoleCommand().cmdloop()
