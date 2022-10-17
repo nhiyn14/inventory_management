@@ -22,11 +22,11 @@ INSERT INTO `product` VALUES
 ('ndc9aaa3-c55f-413f-b81f-39199690e234', '2022-10-17 04:08:27', '2022-10-17 04:20:20', 'comic2', 'fdc9aaa3-c55f-413f-b81f-39199690e236',
 '15', '20', 'This is comic2', '9', 'lowstock');
 
-INSERT INTO `order` VALUES
+INSERT INTO `sales` VALUES
 ('odc9aaa3-c55f-413f-b81f-39199690e233', '2022-10-17 02:08:27', '2022-10-17 02:20:20', 'fdc9aaa3-c55f-413f-b81f-39199690e233', '0'),
 ('odc9aaa3-c55f-413f-b81f-39199690e234', '2022-10-17 02:08:27', '2022-10-17 02:20:20', 'fdc9aaa3-c55f-413f-b81f-39199690e236', '25');
 
-INSERT INTO `order_detail` VALUES
+INSERT INTO `sales_detail` VALUES
 ('ddc9aaa3-c55f-413f-b81f-39199690e233', '2022-10-17 02:08:27', '2022-10-17 02:20:20',
 'odc9aaa3-c55f-413f-b81f-39199690e233', 'pdc9aaa3-c55f-413f-b81f-39199690e233', '0', '10', '2', '20', '0.2'),
 ('ddc9aaa4-c55f-413f-b81f-39199690e233', '2022-10-17 02:08:27', '2022-10-17 02:20:20',

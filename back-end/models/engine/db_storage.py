@@ -2,8 +2,8 @@
 """Class DBStorage"""
 import models
 from models.base_model import BaseModel, Base
-from models.order import Order
-from models.order_detail import OrderDetail
+from models.sales import Sales
+from models.sales_detail import SalesDetail
 from models.product import Product
 from models.user import User
 from os import getenv
@@ -13,7 +13,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 
 
 classes = {"Product": Product, "User": User,
-           "Order": Order, "OrderDetail": OrderDetail}
+           "Sales": Sales, "SalesDetail": SalesDetail}
 
 
 class DBStorage:
