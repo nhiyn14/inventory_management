@@ -9,9 +9,9 @@ from sqlalchemy import ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 
 
-class Order(BaseModel, Base):
+class Sales(BaseModel, Base):
     """class def for an order"""
-    __tablename__ = 'order'
+    __tablename__ = 'sales'
     user_id = Column(String(60), ForeignKey('user.id'), nullable=False)
     discount = Column(Float, default=0, nullable=False)
 

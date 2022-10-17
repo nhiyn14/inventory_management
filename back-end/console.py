@@ -4,15 +4,15 @@ import cmd
 from datetime import datetime
 import models
 from models.base_model import BaseModel, Base
-from models.order import Order
-from models.order_detail import OrderDetail
+from models.sales import Sales
+from models.sales_detail import SalesDetail
 from models.product import Product
 from models.user import User
 import shlex
 
 
 classes = {"BaseModel": BaseModel, "Product": Product, "User": User,
-           "Order": Order, "OrderDetail": OrderDetail}
+           "Sales": Sales, "SalesDetail": SalesDetail}
 
 
 class ConsoleCommand(cmd.Cmd):

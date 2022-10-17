@@ -9,11 +9,11 @@ from sqlalchemy import ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 
 
-class OrderDetail(BaseModel, Base):
+class SalesDetail(BaseModel, Base):
     """class def for an orders detail by each product ordered"""
-    __tablename__ = 'order_detail'
-    order_id = Column(String(60),
-                      ForeignKey('order.id'),
+    __tablename__ = 'sales_detail'
+    sales_id = Column(String(60),
+                      ForeignKey('sales.id'),
                       nullable=False)
     product_id = Column(String(60),
                         ForeignKey('product.id'),
