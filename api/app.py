@@ -21,6 +21,7 @@ corsInstance = CORS(app, resources={r"/*": {"origins": "*"}})
 
 regList = []
 loginList = []
+dashboardList = []
 
 
 @app.route('/login', methods=['POST'])
@@ -61,6 +62,7 @@ def post_registration():
     print(regData)
     email = regData['email']
     password = regData['password']
+    firstName = regData['firstName']
     hashedPassword = hashlib.md5(password.encode())
     print("email:", email, "password:", hashedPassword)
     return jsonify(regList)
@@ -75,6 +77,15 @@ def get_login():
 @app.route('/dashboard', methods=['POST'])
 def post_dashboard():
     """posts data from dashboard form"""
+    dashboardData = request.get_json()
+    dashValues = dashboardData['dashboardValues']
+    dashboardList.append(dashValues)
+    dashboardData = request.get_json()
+
+
+@app.route('/dashboard', methods=['GET'])
+def get_dashboardForm():
+    """retrieves data from dashboard form"""
     dashboardData = request.get_json()
 
 
