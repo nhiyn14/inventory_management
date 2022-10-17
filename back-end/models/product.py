@@ -13,12 +13,7 @@ class Product(BaseModel, Base):
     """ class def for a product"""
     __tablename__ = 'product'
     product_name = Column(String(40), nullable=False)
-    """
-    type_id = Column(Integer, ForeignKey('type.id'), nullable=True)
-    category_id = Column(Integer, ForeignKey('category.id', nullable=True))
-    """
     user_id = Column(String(60), ForeignKey('user.id'), nullable=False)
-    """ needs to default to current user """
     price_wholesale = Column(Float, nullable=False)
     price_retail = Column(Float, nullable=False)
     product_description = Column(String(100))
