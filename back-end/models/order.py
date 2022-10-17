@@ -13,9 +13,7 @@ class Order(BaseModel, Base):
     """class def for an order"""
     __tablename__ = 'order'
     user_id = Column(String(60), ForeignKey('user.id'), nullable=False)
-    """customer_id = Column(Integer, nullable=True)"""
-    discount = Column(Float, default=0, nullable=True)
-    """ is this an order discount, applied to all products? YES"""
+    discount = Column(Float, default=0, nullable=False)
 
     def __init__(self, *args, **kwargs):
         """initializes Order"""

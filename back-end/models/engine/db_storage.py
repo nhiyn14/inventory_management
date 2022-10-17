@@ -8,7 +8,7 @@ from models.product import Product
 from models.user import User
 from os import getenv
 import sqlalchemy
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, delete, update
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 
@@ -49,12 +49,16 @@ class DBStorage:
         """commit all changes of the current database session"""
         self.__session.commit()
 
-    def delete(self, model, id_obj=None):
-        """delete obj from the current database session if not None"""
-        if id_obj is not None:
-            from sqlalchemy import delete
-            self.__session.query(model).filter(model.id == id_obj).delete()
-            self.__session.commit()
+    def delete(self, model, id_obj):
+        """delete obj from the current database session"""
+        self.__session.query(model).filter(model.id == id_obj).delete()
+        self.__session.commit()
+
+    def update(self, model, id_obj, key, value):
+        """update obj in the database with the given id, key and value"""
+        self.__session.query(model).filter(model.id == id_obj).\
+            update({key: value})
+        self.__session.commit()
 
     def reload(self):
         """reloads data from the database"""
