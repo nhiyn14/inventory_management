@@ -12,7 +12,7 @@ from flask_jwt_extended import get_jwt_identity, unset_jwt_cookies
 from flask_jwt_extended import JWTManager
 from datetime import datetime, timedelta, timezone
 from back_end import session, User, Sales, SalesDetail, Product
-from sqlalchemy import select
+from sqlalchemy import select, insert
 
 app = Flask(__name__)
 app.config["JWT_SECRET_KEY"] = "please-remember-to-change-me"
@@ -24,6 +24,12 @@ corsInstance = CORS(app, resources={r"/*": {"origins": "*"}})
 regList = []
 loginList = []
 dashboardList = []
+
+
+@app.route('/login', methods=['GET'])
+def get_login():
+    """gets login information"""
+    return jsonify(loginList)
 
 
 @app.route('/login', methods=['POST'])
@@ -48,38 +54,31 @@ def create_token():
             return response
 
 
-@app.errorhandler(404)
-def errorHandler(e):
-    """404 error handling"""
-    return jsonify(error='Not found'), 404
-
-
 @app.route('/registration', methods=['GET'])
 def get_registration():
-    # should i hash the password and store in db here?
     """gets registration information"""
     return jsonify(regList)
 
 
 @app.route('/registration', methods=['POST'])
 def post_registration():
-    # should i hash the password and store in db here?
     """gets registration information"""
     regData = request.get_json()
-    regList.append(regData)
-    print(regData)
-    email = regData['email']
-    password = regData['password']
-    firstName = regData['firstName']
+    regValues = regData['regValues']
+    first_name = regValues['first_name']
+    last_name = regValues['last_name']
+    email = regValues['email']
+    password = regValues['password']
     hashedPassword = hashlib.md5(password.encode()).hexdigest()
-    print("email:", email, "password:", hashedPassword)
-    return jsonify(regList)
-
-
-@app.route('/login', methods=['GET'])
-def get_login():
-    """gets login information"""
-    return jsonify(loginList)
+    existedUser = session.execute(select(User).where(User.email == email)).fetchone()
+    if existedUser is not None:
+        return {"msg": "This email is already used"}, 409
+    else:
+        newUser = User(first_name=first_name, last_name=last_name,
+                        email= email, password = hashedPassword)
+        session.add(newUser)
+        session.commit()
+    return "New User Account created"
 
 
 @app.route('/dashboard', methods=['POST'])
@@ -96,6 +95,10 @@ def get_dashboardForm():
     """retrieves data from dashboard form"""
     dashboardData = request.get_json()
 
+@app.errorhandler(404)
+def errorHandler(e):
+    """404 error handling"""
+    return jsonify(error='Not found'), 404
 
 if __name__ == "__main__":
     app.run(debug=True)
