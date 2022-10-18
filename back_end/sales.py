@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 """Class Order"""
 from os import getenv
-import models
-from models.base_model import BaseModel, Base
+from back_end.base_model import BaseModel, Base
 from datetime import datetime
 from sqlalchemy import Column, String, Integer, Float
 from sqlalchemy import ForeignKey, DateTime
