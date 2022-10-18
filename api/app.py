@@ -11,6 +11,8 @@ from flask_jwt_extended import create_access_token, get_jwt, jwt_required
 from flask_jwt_extended import get_jwt_identity, unset_jwt_cookies
 from flask_jwt_extended import JWTManager
 from datetime import datetime, timedelta, timezone
+import sys
+sys.path.insert(1, './back-end/models')
 
 app = Flask(__name__)
 app.config["JWT_SECRET_KEY"] = "please-remember-to-change-me"
@@ -21,6 +23,7 @@ corsInstance = CORS(app, resources={r"/*": {"origins": "*"}})
 
 regList = []
 loginList = []
+dashboardList = []
 
 
 @app.route('/login', methods=['POST'])
@@ -29,9 +32,16 @@ def create_token():
     loginData = request.get_json()
     loginValues = loginData['loginValues']
     email = loginValues['email']
-    password = loginValues['password']
+    password = mdloginValues['password']
+    hashedPassword = hashlib.md5(password.encode())
     loginList.append(loginData)
-    if email != "test" or password != "test":
+    
+    userData = storage.execute("SELECT username FROM users WHERE username=:username",{"username":username}).fetchone()
+    if userData is None:
+        return {"msg": "No username found"}, 401
+
+    pwdData = storage.execute("SELECT password FROM users WHERE username=:username",{"username":username}).fetchone()
+    if hasedPassword != pwdData:
         return {"msg": "Wrong email or password"}, 401
 
     access_token = create_access_token(identity=email)
@@ -61,6 +71,7 @@ def post_registration():
     print(regData)
     email = regData['email']
     password = regData['password']
+    firstName = regData['firstName']
     hashedPassword = hashlib.md5(password.encode())
     print("email:", email, "password:", hashedPassword)
     return jsonify(regList)
@@ -75,6 +86,15 @@ def get_login():
 @app.route('/dashboard', methods=['POST'])
 def post_dashboard():
     """posts data from dashboard form"""
+    dashboardData = request.get_json()
+    dashValues = dashboardData['dashboardValues']
+    dashboardList.append(dashValues)
+    dashboardData = request.get_json()
+
+
+@app.route('/dashboard', methods=['GET'])
+def get_dashboardForm():
+    """retrieves data from dashboard form"""
     dashboardData = request.get_json()
 
 
