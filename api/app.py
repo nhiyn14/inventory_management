@@ -11,8 +11,8 @@ from flask_jwt_extended import create_access_token, get_jwt, jwt_required
 from flask_jwt_extended import get_jwt_identity, unset_jwt_cookies
 from flask_jwt_extended import JWTManager
 from datetime import datetime, timedelta, timezone
-import sys
-sys.path.insert(1, './back-end/models')
+from back_end import session, User, Sales, SalesDetail, Product
+from sqlalchemy import select
 
 app = Flask(__name__)
 app.config["JWT_SECRET_KEY"] = "please-remember-to-change-me"
@@ -32,21 +32,20 @@ def create_token():
     loginData = request.get_json()
     loginValues = loginData['loginValues']
     email = loginValues['email']
-    password = mdloginValues['password']
-    hashedPassword = hashlib.md5(password.encode())
-    loginList.append(loginData)
-    
-    userData = storage.execute("SELECT username FROM users WHERE username=:username",{"username":username}).fetchone()
-    if userData is None:
-        return {"msg": "No username found"}, 401
+    password = loginValues['password']
+    hashedPassword = hashlib.md5(password.encode()).hexdigest()
+    print(hashedPassword)
 
-    pwdData = storage.execute("SELECT password FROM users WHERE username=:username",{"username":username}).fetchone()
-    if hasedPassword != pwdData:
-        return {"msg": "Wrong email or password"}, 401
-
-    access_token = create_access_token(identity=email)
-    response = {"access_token": access_token}
-    return response
+    user = session.execute(select(User).where(User.email == email)).fetchone()
+    if user[0].email is None or user[0].email != email:
+        return {"msg": "Incorrect email"}, 401
+    else:
+        if user[0].password != hashedPassword:
+            return {"msg": "Incorrect password"}, 401
+        else:
+            access_token = create_access_token(identity=email)
+            response = {"access_token": access_token}
+            return response
 
 
 @app.errorhandler(404)
@@ -72,7 +71,7 @@ def post_registration():
     email = regData['email']
     password = regData['password']
     firstName = regData['firstName']
-    hashedPassword = hashlib.md5(password.encode())
+    hashedPassword = hashlib.md5(password.encode()).hexdigest()
     print("email:", email, "password:", hashedPassword)
     return jsonify(regList)
 
