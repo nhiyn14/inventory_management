@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 """Class User"""
 from os import getenv
-import models
-from models.base_model import BaseModel, Base
+from back_end.base_model import BaseModel, Base
 from datetime import datetime
 from sqlalchemy import Column, String, Integer, ForeignKey, DateTime
 from sqlalchemy.orm import relationship

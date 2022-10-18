@@ -1,10 +1,12 @@
+-- actual password is initial of first and last name
+-- password for cienna nguyen is cn
 USE stock_inventory;
 
 INSERT INTO `user` VALUES
-('fdc9aaa3-c55f-413f-b81f-39199690e233', '2022-10-17 04:08:27', '2022-10-17 04:20:20', 'james', 'honey', 'jh@jh', 'jh'),
-('fdc9aaa3-c55f-413f-b81f-39199690e234', '2022-10-16 04:08:27', '2022-10-16 04:20:20', 'decland', 'noble', 'dn@dn', 'dn'),
-('fdc9aaa3-c55f-413f-b81f-39199690e235', '2022-10-15 04:08:27', '2022-10-15 04:20:20', 'jon', 'clus', 'jc@jc', 'jc'),
-('fdc9aaa3-c55f-413f-b81f-39199690e236', '2022-10-14 04:08:27', '2022-10-14 04:20:20', 'cienna', 'nguyen', 'cn@cn', 'cn');
+('fdc9aaa3-c55f-413f-b81f-39199690e233', '2022-10-17 04:08:27', '2022-10-17 04:20:20', 'james', 'honey', 'jh@jh', '373633ec8af28e5afaf6e5f4fd87469b'),
+('fdc9aaa3-c55f-413f-b81f-39199690e234', '2022-10-16 04:08:27', '2022-10-16 04:20:20', 'decland', 'noble', 'dn@dn', '567c996739edfa1cdbad4c55a80580df'),
+('fdc9aaa3-c55f-413f-b81f-39199690e235', '2022-10-15 04:08:27', '2022-10-15 04:20:20', 'jon', 'clus', 'jc@jc', 'b7adde8a9eec8ce92b5ee0507ce054a4'),
+('fdc9aaa3-c55f-413f-b81f-39199690e236', '2022-10-14 04:08:27', '2022-10-14 04:20:20', 'cienna', 'nguyen', 'cn@cn', '7efdfc94655a25dcea3ec85e9bb703fa');
 
 INSERT INTO `product` VALUES
 ('pdc9aaa3-c55f-413f-b81f-39199690e233', '2022-10-17 04:08:27', '2022-10-17 04:20:20', 'candle1', 'fdc9aaa3-c55f-413f-b81f-39199690e233',

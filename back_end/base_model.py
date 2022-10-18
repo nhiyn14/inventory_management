@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """Class BaseModel"""
 from datetime import datetime
-import models
 from os import getenv
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String, Integer, ForeignKey, DateTime
