@@ -12,7 +12,7 @@ from flask_jwt_extended import get_jwt_identity, unset_jwt_cookies
 from flask_jwt_extended import JWTManager
 from datetime import datetime, timedelta, timezone
 from back_end import session, User, Sales, SalesDetail, Product
-from sqlalchemy import select, insert
+from sqlalchemy import select, delete
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
@@ -26,6 +26,7 @@ regList = []
 dashboardList = []
 prodList = []
 updateList = []
+deleteList = []
 
 
 @app.route('/login', methods=['GET'])
@@ -107,7 +108,7 @@ def get_dashboardForm():
 
 
 @app.route('/newproduct', methods=['POST'])
-def post_newproduct():
+def post_new_product():
     """create a new product in db"""
     prodData = request.get_json()
     prodValues = prodData['prodValues']
@@ -146,13 +147,13 @@ def post_newproduct():
 
 
 @app.route('/newproduct', methods=['GET'])
-def get_newproduct():
+def get_new_product():
     """get newly-created product information"""
     return jsonify(prodList)
 
 
 @app.route('/updateproduct', methods=['POST'])
-def post_updateproduct():
+def post_updatep_roduct():
     """update information of an existing product"""
     updateData = request.get_json()
     updateValues = updateData['updateValues']
@@ -218,15 +219,52 @@ def post_updateproduct():
 
 
 @app.route('/updateproduct', methods=['GET'])
-def get_updateproduct():
+def get_update_product():
     """get the update information of an existing product"""
     return jsonify(updateList)
 
 
-@app.route('/deleteproduct/<id>', methods=['POST'])
+@app.route('/deleteproduct', methods=['POST'])
+def post_delete_product():
+    """delete an existing product"""
+    deleteData = request.get_json()
+    deleteValues = deleteData['deleteValues']
+    deleteList.clear()
+    deleteList.append(deleteValues)
+
+    product_name = deleteValues['product_name']
+    user_id = deleteValues['user_id']
+
+    existedProduct = session.execute(select(Product).where(
+                                        (Product.user_id == user_id) &
+                                        (Product.product_name == product_name)
+                                     )).fetchone()
+    if existedProduct is None:
+        return {"msg": "Product not found"}, 409
+    product_id = existedProduct[0].id
+    existedSales = session.execute(select(SalesDetail).where(
+                                        (SalesDetail.product_id == product_id)
+                                     )).fetchone()
+    if existedSales is not None:
+        return {"msg": "Unsuccessfully deleted Product.
+                Product is linked to past sales."}, 403
+    session.query(Product).filter(
+                                  Product.user_id == user_id,
+                                  Product.product_name == product_name
+                                  ).delete()
+    session.commit()
+    return {"msg": "Successfully deleted product"}, 200
+
+
+@app.route('/deleteproduct', methods=['GET'])
+def get_delete_product():
+    """delete an existing product"""
+    return jsonify(deleteList)
 
 
 @app.route('/product/<id>', methods=['POST'])
+def get_specific_product():
+    """get the information of the deleted product"""
 
 
 @app.errorhandler(404)
