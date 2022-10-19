@@ -15,6 +15,7 @@ from back_end import session, User, Sales, SalesDetail, Product
 from sqlalchemy import select, insert
 
 app = Flask(__name__)
+app.url_map.strict_slashes = False
 app.config["JWT_SECRET_KEY"] = "please-remember-to-change-me"
 jwt = JWTManager(app)
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
@@ -24,6 +25,7 @@ loginList = []
 regList = []
 dashboardList = []
 prodList = []
+updateList = []
 
 
 @app.route('/login', methods=['GET'])
@@ -86,7 +88,7 @@ def post_registration():
                        email=email, password=hashedPassword)
         session.add(newUser)
         session.commit()
-    return {f"msg": "New User Account created"}, 200
+    return {"msg": "New User Account created"}, 200
 
 
 @app.route('/dashboard', methods=['POST'])
@@ -119,14 +121,19 @@ def post_newproduct():
     price_retail = prodValues['price_retail']
     product_description = prodValues['product_description']
     quantity = prodValues['quantity']
-    product_status = prodValues['product_status']
+    if int(quantity) >= 10:
+        product_status = "In Stock"
+    elif int(quantity) > 0:
+        product_status = "Low Stock"
+    else:
+        product_status = "No Stock"
 
     existedProduct = session.execute(select(Product).where(
                                         (Product.user_id == user_id) &
                                         (Product.product_name == product_name)
                                      )).fetchone()
     if existedProduct is not None:
-        return {f"msg": "Product {product_name} is already existed"}, 409
+        return {"msg": "Product {product_name} is already existed"}, 409
     else:
         newProduct = Product(product_name=product_name, user_id=user_id,
                              price_wholesale=price_wholesale,
@@ -135,7 +142,7 @@ def post_newproduct():
                              product_status=product_status)
         session.add(newProduct)
         session.commit()
-    return {f"msg": "Successfully created product {product_name}"}, 200
+    return {"msg": "Successfully created product"}, 200
 
 
 @app.route('/newproduct', methods=['GET'])
@@ -144,9 +151,83 @@ def get_newproduct():
     return jsonify(prodList)
 
 
-@app.route('/product/<id>', methods=['POST'])
-@app.route('/updateproduct/<id>', methods=['POST'])
+@app.route('/updateproduct', methods=['POST'])
+def post_updateproduct():
+    """update information of an existing product"""
+    updateData = request.get_json()
+    updateValues = updateData['updateValues']
+    updateList.clear()
+    updateList.append(updateValues)
+
+    product_name = updateValues['product_name']
+    # user_id just for testing purpose
+    user_id = 'fdc9aaa3-c55f-413f-b81f-39199690e236'
+
+    existedProduct = session.execute(select(Product).where(
+                                        (Product.user_id == user_id) &
+                                        (Product.product_name == product_name)
+                                     )).fetchone()
+    if existedProduct is None:
+        return {"msg": "Product not found"}, 409
+    else:
+        if 'price_wholesale' in str(updateList):
+            session.query(Product).filter(
+                                          Product.user_id == user_id,
+                                          Product.product_name == product_name
+                                          ) \
+                .update({"price_wholesale": updateValues['price_wholesale']})
+        if 'price_retail' in str(updateList):
+            session.query(Product).filter(
+                                          Product.user_id == user_id,
+                                          Product.product_name == product_name
+                                          ) \
+                .update({"price_retail": updateValues['price_retail']})
+        if 'product_description' in str(updateList):
+            product_description = updateValues['product_description']
+            session.query(Product).filter(
+                                          Product.user_id == user_id,
+                                          Product.product_name == product_name
+                                          ) \
+                .update({"product_description": product_description})
+        if 'quantity' in str(updateList):
+            session.query(Product).filter(
+                                          Product.user_id == user_id,
+                                          Product.product_name == product_name
+                                          ) \
+                .update({"quantity": updateValues['quantity']})
+            if int(updateValues['quantity']) >= 10:
+                quantity = "In Stock"
+            elif int(updateValues['quantity']) > 0:
+                quantity = "Low Stock"
+            else:
+                quantity = "No Stock"
+            session.query(Product).filter(
+                                          Product.user_id == user_id,
+                                          Product.product_name == product_name
+                                          ) \
+                .update({"product_status": quantity})
+        if 'new_prod_name' in str(updateList):
+            print("it got here")
+            session.query(Product).filter(
+                                          Product.user_id == user_id,
+                                          Product.product_name == product_name
+                                          ) \
+                .update({"product_name": updateValues['new_prod_name']})
+        session.commit()
+    return {"msg": "Successfully updated product"}, 200
+
+
+@app.route('/updateproduct', methods=['GET'])
+def get_updateproduct():
+    """get the update information of an existing product"""
+    return jsonify(updateList)
+
+
 @app.route('/deleteproduct/<id>', methods=['POST'])
+
+
+@app.route('/product/<id>', methods=['POST'])
+
 
 @app.errorhandler(404)
 def errorHandler(e):
