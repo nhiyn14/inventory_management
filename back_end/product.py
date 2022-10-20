@@ -15,7 +15,7 @@ class Product(BaseModel, Base):
     user_id = Column(String(60), ForeignKey('user.id'), nullable=False)
     price_wholesale = Column(Float, nullable=False)
     price_retail = Column(Float, nullable=False)
-    product_description = Column(String(100))
+    product_description = Column(String(200))
     quantity = Column(Integer, nullable=False)
     product_status = Column(String(40))
 
