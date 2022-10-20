@@ -1,6 +1,4 @@
-body {
-    background-color: #5885AF;
-}
+
 .registrationContainer{
     max-width: fit-content;
     display: flex;
@@ -19,12 +17,12 @@ body {
     font-size: 40px;
 }
 
-.registrationFormContents {
+.loginFormContents {
     display: flex;
     align-items: flex-end;
     justify-content: center;
     width: 500px;
-    height: 450px;
+    height: 350px;
     background-color: rgb(255, 255, 255);
     border: 2px solid rgb(228, 228, 228);
     border-radius: 10px;
@@ -45,45 +43,19 @@ body {
     width: 75%;
     
 }
-.emailInput {
+.logEmailInput {
     padding-top: 15px;
     padding-bottom: 15px;
+    position: relative;
+    bottom: -65px;
 }
-.passwordInput {
+.logPasswordInput {
     padding-top: 15px;
     padding-bottom: 15px;
-}
-.confirmedPasswordInput  {
-    padding-top: 15px;
-    padding-bottom: 15px;
-}
-.nameInput {
-    padding-top: 15px;
-    padding-bottom: 15px;
-}
-.lastnameInput {
-    padding-top: 15px;
-    padding-bottom: 15px;
-}
-
-.registrationButton {
-    display: flex;
-    justify-content: center;
-    padding-bottom: 10px;
-}
-.registrationInputs > p {
-    color: blue;
-    margin: 0 auto;
-    text-align: center;
+    position: relative;
+    bottom: -65px;
 
 }
-.registrationButton {
-    padding-top: 20px;
-}
-.registrationButton :hover {
-    opacity: 0.8;
-}
-
 .routeLink {
     padding-bottom: 25px;
 }
@@ -93,4 +65,7 @@ body {
     position: relative;
     right: 150px;
     top: 500px;
+}
+.loginButton {
+    padding-bottom: 20px;
 }

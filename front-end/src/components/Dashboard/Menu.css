@@ -1,0 +1,11 @@
+.dashboardForm {
+    padding-left: 30px;
+}
+.dashContents {
+    display: flex;
+    flex-direction: row;
+}
+.grid {
+    padding-top: 320px;
+    padding-left: 100px;
+}
