@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-module for the beginning of greatness
+API back-end
 """
 import hashlib
 import pydash
@@ -11,7 +11,7 @@ from flask_jwt_extended import create_access_token, get_jwt, jwt_required
 from flask_jwt_extended import get_jwt_identity, unset_jwt_cookies
 from flask_jwt_extended import JWTManager
 from datetime import datetime, timedelta, timezone
-from back_end import session, User, Sales, SalesDetail, Product
+from back_end import session, User, Sales, Product
 from sqlalchemy import select, delete
 
 app = Flask(__name__)
@@ -27,12 +27,6 @@ dashboardList = []
 prodList = []
 updateList = []
 deleteList = []
-
-
-@app.route('/login', methods=['GET'])
-def get_login():
-    """gets login information"""
-    return jsonify(loginList)
 
 
 @app.route('/login', methods=['POST'])
@@ -60,10 +54,10 @@ def create_token():
             return response
 
 
-@app.route('/registration', methods=['GET'])
-def get_registration():
-    """gets registration information"""
-    return jsonify(regList)
+@app.route('/login', methods=['GET'])
+def get_login():
+    """gets login information"""
+    return jsonify(loginList)
 
 
 @app.route('/registration', methods=['POST'])
@@ -92,19 +86,30 @@ def post_registration():
     return {"msg": "New User Account created"}, 200
 
 
+@app.route('/registration', methods=['GET'])
+def get_registration():
+    """gets registration information"""
+    return jsonify(regList)
+
+
 @app.route('/dashboard', methods=['POST'])
 def post_dashboard():
     """posts data from dashboard form"""
-    dashboardData = request.get_json()
-    dashValues = dashboardData['dashboardValues']
-    dashboardList.append(dashValues)
-    dashboardData = request.get_json()
+    dashboardList.clear()
+    # user_id just for testing purpose
+    user_id = 'fdc9aaa3-c55f-413f-b81f-39199690e236'
+    for each in session.query(Product).where(Product.user_id == user_id):
+        product = each.__dict__
+        if "_sa_instance_state" in product:
+            del product["_sa_instance_state"]
+        dashboardList.append(product)
+    return {"msg": "Dashboard ready to display"}, 200
 
 
 @app.route('/dashboard', methods=['GET'])
 def get_dashboardForm():
     """retrieves data from dashboard form"""
-    dashboardData = request.get_json()
+    return json.dumps(dashboardList, indent=4, default=str)
 
 
 @app.route('/newproduct', methods=['POST'])
@@ -134,7 +139,7 @@ def post_new_product():
                                         (Product.product_name == product_name)
                                      )).fetchone()
     if existedProduct is not None:
-        return {"msg": "Product {product_name} is already existed"}, 409
+        return {"msg": "Product is already existed"}, 409
     else:
         newProduct = Product(product_name=product_name, user_id=user_id,
                              price_wholesale=price_wholesale,
@@ -246,7 +251,7 @@ def post_delete_product():
                                         (SalesDetail.product_id == product_id)
                                      )).fetchone()
     if existedSales is not None:
-        return {"msg": "Unsuccessfully deleted Product.
+        return {"msg": "Unsuccessfully deleted Product. \
                 Product is linked to past sales."}, 403
     session.query(Product).filter(
                                   Product.user_id == user_id,
