@@ -46,7 +46,7 @@ export default function RegisterUI() {
                 <h1>StockTake.</h1> 
                 {isLoading === true ? <CircularProgress className="loadingBar" size={80}/> : null}
             </header>
-            <body >
+            <body className="indexBody">
                 <div className="registrationContainer">
                     <div className="welcomeText">
                         <h1>Welcome to StockTake</h1>

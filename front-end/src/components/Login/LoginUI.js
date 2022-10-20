@@ -11,7 +11,6 @@ import Context from '../../appContext'
 import CircularProgress from "@mui/material/CircularProgress";
 import { useContext } from "react";
 const axios = require("axios").default;
-var _ = require("lodash");
 const token = sessionStorage.getItem("token")
 
 console.log("this is your token", token);
@@ -29,23 +28,25 @@ export default function LoginUI() {
     });
     function logMeIn(event) {
         const url = 'http://127.0.0.1:5000/login'
-        axios.post(url, {loginValues})
+        axios.post(url, {loginValues}, {headers: {'Access-Control-Allow-Origin': 'http://localhost:3000'}})
             .then((resp) => {
                 if (resp.status == 200)return resp
                 else alert ("there has been an error")
                 console.log(resp);
+                console.log(loginValues);
             })
             .then((data) => {
                 console.log(data);
                 console.log("this came from the backend", data.data.access_token);
                 sessionStorage.setItem("token", data.data.access_token)
                 if (data.status == 200 && data.data.access_token != ""){
-                    navigate('/registration')
-                }
+                    navigate('/dashboard')
+                } else setTokenError(true)
             }).catch((error)=>{
                 console.log(error);
             })
-
+        
+ 
         // setLoginValues({
         //     email: "",
         //     password: "",
@@ -64,7 +65,7 @@ export default function LoginUI() {
                 ) : null}
             </header>
 
-            <body>
+            <body className="indexBody">
             
                 <div className="registrationContainer">
                     <div className="welcomeText">
@@ -73,10 +74,10 @@ export default function LoginUI() {
                         <p> Please register your details </p>
                     </div>
 
-                    <form className="registrationFormContents">
+                    <form className="loginFormContents">
                         <div className="registrationInputs">
                             <div className="registrationDetail">
-                                <div className="emailInput">
+                                <div className="logEmailInput">
                                     <TextField
                                         value={loginValues["email"]}
                                         onChange={(e) => {
@@ -93,7 +94,7 @@ export default function LoginUI() {
                                         error={emailError}
                                     />
                                 </div>
-                                <div className="passwordInput">
+                                <div className="logPasswordInput">
                                     <TextField
                                         type="password"
                                         value={loginValues["password"]}
@@ -113,13 +114,13 @@ export default function LoginUI() {
                                     {tokenError === true? <p>Error: you're login details are incorrect.</p>: null}
                                 </div>
                             </div>
-                            <div className="registrationButton">
+                            <div className="loginButton">
                                 <Button
                                     variant="contained"
                                     onClick={logMeIn}
                                     fullWidth={true}
                                 >
-                                    Register
+                                    Login
                                 </Button>
                             </div>
                             <p className="routeLink">
