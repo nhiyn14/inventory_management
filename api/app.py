@@ -36,12 +36,11 @@ def create_token():
     loginValues = loginData['loginValues']
     loginList.clear()
     loginList.append(loginValues)
-
+     
     email = loginValues['email']
     password = loginValues['password']
     hashedPassword = hashlib.md5(password.encode()).hexdigest()
-    print(hashedPassword)
-
+    # check if this user exist
     user = session.execute(select(User).where(User.email == email)).fetchone()
     if user[0].email is None or user[0].email != email:
         return {"msg": "Incorrect email"}, 400
@@ -73,12 +72,13 @@ def post_registration():
     email = regValues['email']
     password = regValues['password']
     hashedPassword = hashlib.md5(password.encode()).hexdigest()
-
+    # check if the given email already used by another user
     existedUser = session.execute(select(User).where(User.email == email)
                                   ).fetchone()
     if existedUser is not None:
         return {"msg": "This email is already used"}, 409
     else:
+        #regist new user
         newUser = User(first_name=first_name, last_name=last_name,
                        email=email, password=hashedPassword)
         session.add(newUser)
@@ -186,6 +186,7 @@ def update_product(product_name):
             product.update({"product_description": product_description})
         if 'quantity' in str(updateList):
             product.update({"quantity": updateValues['quantity']})
+            # update the product_status
             if int(updateValues['quantity']) >= 10:
                 product_status = "In Stock"
             elif int(updateValues['quantity']) > 0:
