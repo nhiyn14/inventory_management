@@ -24,7 +24,7 @@ corsInstance = CORS(app, resources={r"/*": {"origins": "*"}})
 loginList = []
 regList = []
 dashboardList = []
-prodList = []
+newList = []
 updateList = []
 deleteList = []
 
@@ -109,25 +109,26 @@ def get_dashboard():
 @app.route('/newproduct', methods=['POST'])
 def post_new_product():
     """create a new product in db"""
-    prodData = request.get_json()
-    prodValues = prodData['prodValues']
-    prodList.clear()
-    prodList.append(prodValues)
+    newData = request.get_json()
+    newValues = newData['newValues']
+    newList.clear()
+    newList.append(newValues)
 
-    product_name = prodValues['product_name']
     # user_id just for testing purpose
     user_id = 'fdc9aaa3-c55f-413f-b81f-39199690e236'
-    price_wholesale = prodValues['price_wholesale']
-    price_retail = prodValues['price_retail']
-    product_description = prodValues['product_description']
-    quantity = prodValues['quantity']
+    product_name = newValues['product_name']
+    price_wholesale = newValues['price_wholesale']
+    price_retail = newValues['price_retail']
+    product_description = newValues['product_description']
+    quantity = newValues['quantity']
+    # update the product_status
     if int(quantity) >= 10:
         product_status = "In Stock"
     elif int(quantity) > 0:
         product_status = "Low Stock"
     else:
         product_status = "No Stock"
-
+    # check if the product wanted to create exist
     existedProduct = session.execute(select(Product).where(
                                         (Product.user_id == user_id) &
                                         (Product.product_name == product_name)
@@ -148,7 +149,7 @@ def post_new_product():
 @app.route('/newproduct', methods=['GET'])
 def get_new_product():
     """get newly-created product information"""
-    return jsonify(prodList)
+    return jsonify(newList)
 
 
 @app.route('/updateproduct/<product_name>', methods=['PUT'])
@@ -159,10 +160,10 @@ def update_product(product_name):
     updateList.clear()
     updateList.append(updateValues)
 
-    product_name = updateValues['product_name']
     # user_id just for testing purpose
     user_id = 'fdc9aaa3-c55f-413f-b81f-39199690e236'
-
+    product_name = updateValues['product_name']
+    # check if the product wanted to update exist
     existedProduct = session.execute(select(Product).where(
                                         (Product.user_id == user_id) &
                                         (Product.product_name == product_name)
@@ -170,49 +171,30 @@ def update_product(product_name):
     if existedProduct is None:
         return {"msg": "Product not found"}, 409
     else:
-        if 'price_wholesale' in str(updateList):
-            session.query(Product).filter(
+        # check keys that need to be update AND update it
+        product = session.query(Product).filter(
                                           Product.user_id == user_id,
                                           Product.product_name == product_name
-                                          ) \
+                                          )
+        if 'price_wholesale' in str(updateList):
+            product \
                 .update({"price_wholesale": updateValues['price_wholesale']})
         if 'price_retail' in str(updateList):
-            session.query(Product).filter(
-                                          Product.user_id == user_id,
-                                          Product.product_name == product_name
-                                          ) \
-                .update({"price_retail": updateValues['price_retail']})
+            product.update({"price_retail": updateValues['price_retail']})
         if 'product_description' in str(updateList):
             product_description = updateValues['product_description']
-            session.query(Product).filter(
-                                          Product.user_id == user_id,
-                                          Product.product_name == product_name
-                                          ) \
-                .update({"product_description": product_description})
+            product.update({"product_description": product_description})
         if 'quantity' in str(updateList):
-            session.query(Product).filter(
-                                          Product.user_id == user_id,
-                                          Product.product_name == product_name
-                                          ) \
-                .update({"quantity": updateValues['quantity']})
+            product.update({"quantity": updateValues['quantity']})
             if int(updateValues['quantity']) >= 10:
-                quantity = "In Stock"
+                product_status = "In Stock"
             elif int(updateValues['quantity']) > 0:
-                quantity = "Low Stock"
+                product_status = "Low Stock"
             else:
-                quantity = "No Stock"
-            session.query(Product).filter(
-                                          Product.user_id == user_id,
-                                          Product.product_name == product_name
-                                          ) \
-                .update({"product_status": quantity})
+                product_status = "No Stock"
+            product.update({"product_status": product_status})
         if 'new_prod_name' in str(updateList):
-            print("it got here")
-            session.query(Product).filter(
-                                          Product.user_id == user_id,
-                                          Product.product_name == product_name
-                                          ) \
-                .update({"product_name": updateValues['new_prod_name']})
+            product.update({"product_name": updateValues['new_prod_name']})
         session.commit()
     return jsonify(updateList)
 
@@ -226,13 +208,15 @@ def delete_product(product_name):
 
     # user_id just for testing purpose
     user_id = 'fdc9aaa3-c55f-413f-b81f-39199690e234'
-
+    # check if the product wanted to delete exist
     existedProduct = session.execute(select(Product).where(
                                         (Product.user_id == user_id) &
                                         (Product.product_name == product_name)
                                      )).fetchone()
     if existedProduct is None:
         return {"msg": "Product not found"}, 409
+
+    # check if the product is linked to any sales
     product_id = existedProduct[0].id
     existedSales = session.execute(select(Sales).where(
                                         (Sales.product_id == product_id)
@@ -240,6 +224,7 @@ def delete_product(product_name):
     if existedSales is not None:
         return {"msg": "Unsuccessfully deleted Product. \
                 Product is linked to past sales."}, 403
+    # delete the product
     session.query(Product).filter(
                                   Product.user_id == user_id,
                                   Product.product_name == product_name
@@ -248,16 +233,65 @@ def delete_product(product_name):
     return jsonify(deleteList)
 
 
-@app.route('/deleteproduct', methods=['GET'])
-def get_delete_product():
-    """delete an existing product"""
-    return jsonify(deleteList)
+@app.route('/newsales', methods=['POST'])
+def post_new_sales():
+    """create a new sales in db"""
+    newData = request.get_json()
+    newValues = newData['newValues']
+
+    # user_id just for testing purpose
+    user_id = 'fdc9aaa3-c55f-413f-b81f-39199690e234'
+    product_name = newValues['product_name']
+    quantity = newValues['quantity']
+
+    existedProduct = session.execute(select(Product).where(
+                                        (Product.user_id == user_id) &
+                                        (Product.product_name == product_name)
+                                     )).fetchone()
+    # check if the product wanted to sale exist
+    if existedProduct is None:
+        return {"msg": "Product not found"}, 409
+    # check if the quanity wanted to sale enough
+    if int(existedProduct[0].quantity) < int(quantity):
+        return {"msg": "Not enough stock for this sales"}, 409
+    else:
+        new_quantity = int(existedProduct[0].quantity) - int(quantity)
+        # update the product_status
+        if new_quantity >= 10:
+            product_status = "In Stock"
+        elif new_quantity > 0:
+            product_status = "Low Stock"
+        else:
+            product_status = "No Stock"
+        session.query(Product).filter(
+                                      Product.user_id == user_id,
+                                      Product.product_name == product_name
+                                      ) \
+            .update({"product_status": product_status,
+                     "quantity": new_quantity})
+    # get all required values ready
+    product_id = existedProduct[0].id
+    sale_price = existedProduct[0].price_retail
+    price_wholesale = existedProduct[0].price_wholesale
+    revenue = float(sale_price) * int(quantity)
+    profit = (float(sale_price) - float(price_wholesale)) * int(quantity)
+    # add new sales
+    newSales = Sales(user_id=user_id, product_id=product_id,
+                     sale_price=sale_price, quantity=quantity,
+                     revenue=revenue, profit=profit)
+    session.add(newSales)
+    session.commit()
+
+    # get list ready to return
+    newList.clear()
+    newList.append(newSales.__dict__)
+    return {"msg": "Successfully created sales"}, 200
 
 
-@app.errorhandler(404)
-def errorHandler(e):
-    """404 error handling"""
-    return jsonify(error='Not found'), 404
+@app.route('/newsales', methods=['GET'])
+def get_new_sales():
+    """return information of the new sales"""
+    return json.dumps(newList, indent=4, default=str)
 
 
 if __name__ == "__main__":
