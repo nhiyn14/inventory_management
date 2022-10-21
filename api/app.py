@@ -40,6 +40,14 @@ def create_token():
     return response
 
 
+@app.route('/dashboardTest', methods=['GET'])
+@jwt_required()
+def dashboardTest():
+    current_user = get_jwt_identity()
+    print(current_user)
+    return jsonify({"user": current_user})
+
+
 @app.errorhandler(404)
 def errorHandler(e):
     """404 error handling"""
