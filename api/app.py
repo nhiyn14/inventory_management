@@ -151,8 +151,8 @@ def get_new_product():
     return jsonify(prodList)
 
 
-@app.route('/updateproduct', methods=['POST'])
-def post_updatep_roduct():
+@app.route('/updateproduct/<product_name>', methods=['PUT'])
+def update_product(product_name):
     """update information of an existing product"""
     updateData = request.get_json()
     updateValues = updateData['updateValues']
@@ -214,25 +214,18 @@ def post_updatep_roduct():
                                           ) \
                 .update({"product_name": updateValues['new_prod_name']})
         session.commit()
-    return {"msg": "Successfully updated product"}, 200
-
-
-@app.route('/updateproduct', methods=['GET'])
-def get_update_product():
-    """get the update information of an existing product"""
     return jsonify(updateList)
 
 
-@app.route('/deleteproduct', methods=['POST'])
-def post_delete_product():
+@app.route('/deleteproduct/<product_name>', methods=['DELETE'])
+def delete_product(product_name):
     """delete an existing product"""
-    deleteData = request.get_json()
-    deleteValues = deleteData['deleteValues']
+    deleteValues = {"product_name": product_name}
     deleteList.clear()
     deleteList.append(deleteValues)
 
-    product_name = deleteValues['product_name']
-    user_id = deleteValues['user_id']
+    # user_id just for testing purpose
+    user_id = 'fdc9aaa3-c55f-413f-b81f-39199690e234'
 
     existedProduct = session.execute(select(Product).where(
                                         (Product.user_id == user_id) &
@@ -241,8 +234,8 @@ def post_delete_product():
     if existedProduct is None:
         return {"msg": "Product not found"}, 409
     product_id = existedProduct[0].id
-    existedSales = session.execute(select(SalesDetail).where(
-                                        (SalesDetail.product_id == product_id)
+    existedSales = session.execute(select(Sales).where(
+                                        (Sales.product_id == product_id)
                                      )).fetchone()
     if existedSales is not None:
         return {"msg": "Unsuccessfully deleted Product. \
@@ -252,7 +245,7 @@ def post_delete_product():
                                   Product.product_name == product_name
                                   ).delete()
     session.commit()
-    return {"msg": "Successfully deleted product"}, 200
+    return jsonify(deleteList)
 
 
 @app.route('/deleteproduct', methods=['GET'])
