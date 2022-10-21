@@ -11,6 +11,7 @@ from sqlalchemy.orm import relationship
 class Sales(BaseModel, Base):
     """class def for an orders detail by each product ordered"""
     __tablename__ = 'sales'
+    user_id = Column(String(60), ForeignKey('user.id'), nullable=False)
     product_id = Column(String(60),
                         ForeignKey('product.id'),
                         nullable=False)
