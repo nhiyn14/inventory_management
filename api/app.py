@@ -92,8 +92,8 @@ def get_registration():
     return jsonify(regList)
 
 
-@app.route('/dashboard', methods=['POST'])
-def post_dashboard():
+@app.route('/dashboard', methods=['GET'])
+def get_dashboard():
     """posts data from dashboard form"""
     dashboardList.clear()
     # user_id just for testing purpose
@@ -103,12 +103,6 @@ def post_dashboard():
         if "_sa_instance_state" in product:
             del product["_sa_instance_state"]
         dashboardList.append(product)
-    return {"msg": "Dashboard ready to display"}, 200
-
-
-@app.route('/dashboard', methods=['GET'])
-def get_dashboardForm():
-    """retrieves data from dashboard form"""
     return json.dumps(dashboardList, indent=4, default=str)
 
 
@@ -265,11 +259,6 @@ def post_delete_product():
 def get_delete_product():
     """delete an existing product"""
     return jsonify(deleteList)
-
-
-@app.route('/product/<id>', methods=['POST'])
-def get_specific_product():
-    """get the information of the deleted product"""
 
 
 @app.errorhandler(404)
