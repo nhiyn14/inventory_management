@@ -2,14 +2,6 @@ import React from "react";
 import './DataDash.css'
 
 function DataDash(props) {
-    const productID = "3"
-    const productName = 'Candle'
-    const productWholesalePrice = '$4'
-    const productRetailPrice = '$55'
-    const productQuantity = '500'
-    const productDescription = 'Ripper candle'
-    const productType = 'Candle'
-
 
     return (
         <div className="containerDash">

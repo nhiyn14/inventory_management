@@ -7,8 +7,9 @@ import authorizedCall from '../../AxiosInstance/Instances'
 import AxiosInstance from "../../AxiosInstance/Instances";
 
 
-function DashboardForm(props) {
-    const [dashboardValues, setDashboardValues] = useState({
+function DashboardForm({onDashFormSubmission}) {
+    const [isLoading, setIsLoading] = useState(false)
+    const [dashBoardFormValues, setDashBoardFormValues] = useState({
         price_wholesale: "",
         price_retail: "",
         quantity: "",
@@ -17,17 +18,17 @@ function DashboardForm(props) {
 });
 
     const addItem = async () => {
-        // try {
-        //     const response = await AxiosInstance.get("dashboardTest");
-        //     props.onDashFormSubmission(dashboardValues);
-        //     console.log(response);
-        // } catch (error) {
-        //     console.log(error);
-        // } finally {
-        //     // pointer to addProductData function, passing through form values as a paramter
+        try {
+            setIsLoading(true)
+            const response = await AxiosInstance.post("dashboard", dashBoardFormValues);
+            onDashFormSubmission(dashBoardFormValues);
+            console.log(response);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsLoading(false)
             
-        // }
-        props.onDashFormSubmission(dashboardValues)
+        }
     };
 
     return (
@@ -40,10 +41,10 @@ function DashboardForm(props) {
                         focused
                         fullWidth
                         required
-                        value={dashboardValues["product_name"]}
+                        value={dashBoardFormValues["product_name"]}
                         onChange={(e) => {
-                            setDashboardValues({
-                                ...dashboardValues,
+                            setDashBoardFormValues({
+                                ...dashBoardFormValues,
                                 product_name: e.target.value,
                             });
                         }}
@@ -57,10 +58,10 @@ function DashboardForm(props) {
                         focused
                         type="number"
                         required
-                        value={dashboardValues["price_wholesale"]}
+                        value={dashBoardFormValues["price_wholesale"]}
                         onChange={(e) => {
-                            setDashboardValues({
-                                ...dashboardValues,
+                            setDashBoardFormValues({
+                                ...dashBoardFormValues,
                                 price_wholesale: e.target.value,
                             });
                         }}
@@ -75,10 +76,10 @@ function DashboardForm(props) {
                         focused
                         type="number"
                         required
-                        value={dashboardValues["price_retail"]}
+                        value={dashBoardFormValues["price_retail"]}
                         onChange={(e) => {
-                            setDashboardValues({
-                                ...dashboardValues,
+                            setDashBoardFormValues({
+                                ...dashBoardFormValues,
                                 price_retail: e.target.value,
                             });
                         }}
@@ -92,10 +93,10 @@ function DashboardForm(props) {
                         focused
                         type="number"
                         required
-                        value={dashboardValues["quantity"]}
+                        value={dashBoardFormValues["quantity"]}
                         onChange={(e) => {
-                            setDashboardValues({
-                                ...dashboardValues,
+                            setDashBoardFormValues({
+                                ...dashBoardFormValues,
                                 quantity: e.target.value,
                             });
                         }}
@@ -110,18 +111,18 @@ function DashboardForm(props) {
                         required
                         fullWidth
                         multiline
-                        value={dashboardValues["product_description"]}
+                        value={dashBoardFormValues["product_description"]}
                         maxRows={4}
                         onChange={(e) => {
-                            setDashboardValues({
-                                ...dashboardValues,
+                            setDashBoardFormValues({
+                                ...dashBoardFormValues,
                                 product_description: e.target.value,
                             });
                         }}
                     />
                 </div>
                 <div className="dashboardFormButton">
-                    <Button variant="outlined" onClick={addItem}>
+                    <Button variant="outlined" onClick={() => onDashFormSubmission(dashBoardFormValues)}>
                         Add Item
                     </Button>
                 </div>
