@@ -5,13 +5,14 @@ import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
 import Header from "./components/Dashboard/Header";
 import DashboardMenu from "./components/Dashboard/DashboardMenu";
 import DashboardForm from "./components/Dashboard/DashboardForm"
+import DataDash from "./components/Dashboard/DataDash";
 
 function App() {
     return (
         <BrowserRouter>
             <Routes>
                 <Route path="/registration" element={<RegisterUI />}></Route>
-                <Route path="/login" element={<LoginUI />}></Route>
+                <Route path="/" element={<LoginUI />}></Route>
                 <Route path="/dashboard" element={<DashboardMenu/>}></Route>
             </Routes>
         </BrowserRouter>

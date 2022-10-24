@@ -5,11 +5,10 @@ import { TextField } from "@mui/material";
 import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import { CircularProgress } from '@mui/material';
- 
+
 
 
 const axios = require("axios").default;
-var _ = require("lodash");
 
 
 
@@ -46,7 +45,7 @@ export default function RegisterUI() {
                 <h1>StockTake.</h1> 
                 {isLoading === true ? <CircularProgress className="loadingBar" size={80}/> : null}
             </header>
-            <body >
+            <body className="indexBody">
                 <div className="registrationContainer">
                     <div className="welcomeText">
                         <h1>Welcome to StockTake</h1>
@@ -167,7 +166,7 @@ export default function RegisterUI() {
                     </form>
                 </div>
             </body>
-            <footer>
+            <footer className="indexFooter">
                 
             </footer>
         </div>

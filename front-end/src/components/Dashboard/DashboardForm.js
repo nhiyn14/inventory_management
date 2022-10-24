@@ -1,108 +1,130 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
+import "./DashboardForm.css";
 import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
-import "./DashboardForm.css";
+import axios from "axios";
+import authorizedCall from "../../AxiosInstance/Instances";
+import AxiosInstance from "../../AxiosInstance/Instances";
 
-export default function DashboardForm() {
-    const [productInformation, setProductInformation] = useState({
-        product_description: '',
-        product_id: '',
-        product_price: '',
-        product_status: '',
-        product_quantity: '',
-        product_sales: '',
-    })
+function DashboardForm({ onDashFormSubmission }) {
+    const [isLoading, setIsLoading] = useState(false);
+    const [dashBoardFormValues, setDashBoardFormValues] = useState({
+        price_wholesale: "",
+        price_retail: "",
+        quantity: "",
+        product_description: "",
+        product_name: "",
+    });
 
-    const SubmitHandler = (e) => {
-        e.preventDefault();
-
-        setProductInformation(" ")
-
-
+    const addItem = () => {
+        onDashFormSubmission(dashBoardFormValues);
+        setDashBoardFormValues({
+            price_wholesale: "",
+            price_retail: "",
+            quantity: "",
+            product_description: "",
+            product_name: "",
+        });
     };
 
     return (
-        <header>
-            hello
-        </header>
-        <form className="dashboard_form">
-            <div className="product_description">
-                <TextField
-                    id="outlined-basic"
-                    label="Description"
-                    variant="outlined"
-                    value={productInformation["product_description"]}
-                    onChange={(e) => {
-                        setProductInformation({
-                            ...productInformation,
-                            product_description: e.target.value,
-                        });
-                    }}
-                />
-
-                <TextField
-                    id="outlined-basic"
-                    label="Product ID"
-                    variant="outlined"
-                    value={productInformation['product_id']}
-                    onChange={(e) => {
-                        setProductInformation({
-                            product_id: e.target.value
-                        })
-                    }}
-                />
-
-                <TextField
-                    id="outlined-basic"
-                    label="Retail price"
-                    variant="outlined"
-                    value={productInformation["product_price"]}
-                    onChange={(e) => {
-                        setProductInformation({
-                            product_price: e.target.value
-                        })
-                    }}
-                />
-
-                <TextField
-                    id="outlined-basic"
-                    label="Product status"
-                    variant="outlined"
-                    value={productInformation['product_status']}
-                    onChange={(e) => {
-                        setProductInformation({
-                            product_status: e.target.value
-                        })
-                    }}
-                />
-
-                <TextField
-                    id="outlined-basic"
-                    label="Quantity"
-                    variant="outlined"
-                    value={productInformation["product_quantity"]}
-                    onChange={(e) => {
-                        setProductInformation({
-                            product_quantity: e.target.value
-                        })
-                    }}
-                />
-                <TextField
-                    id="outlined-basic"
-                    label="Total sales"
-                    variant="outlined"
-                    value={productInformation["product_sales"]}
-                    onChange={(e) => {
-                        setProductInformation({
-                            product_sales: e.target.value
-                        })
-                    }}
-                />
+        <div className="container">
+            <div className="dashboardInputs">
+                <div className="productName">
+                    <TextField
+                        label="Product name"
+                        color="primary"
+                        fullWidth
+                        required
+                        value={dashBoardFormValues["product_name"]}
+                        onChange={(e) => {
+                            setDashBoardFormValues({
+                                ...dashBoardFormValues,
+                                product_name: e.target.value,
+                            });
+                        }}
+                    />
+                </div>
+                <div className="productWholesalePrice">
+                    <TextField
+                        id="outlined-basic"
+                        label="Wholesale price"
+                        variant="outlined"
+                        type="number"
+                        required
+                        value={dashBoardFormValues["price_wholesale"]}
+                        onChange={(e) => {
+                            setDashBoardFormValues({
+                                ...dashBoardFormValues,
+                                price_wholesale: e.target.value,
+                            });
+                        }}
+                    />
+                </div>
+                <div></div>
+                <div className="productRetailPrice">
+                    <TextField
+                        id="outlined-basic"
+                        label="Retail price"
+                        variant="outlined"
+                        type="number"
+                        required
+                        value={dashBoardFormValues["price_retail"]}
+                        onChange={(e) => {
+                            setDashBoardFormValues({
+                                ...dashBoardFormValues,
+                                price_retail: e.target.value,
+                            });
+                        }}
+                    />
+                </div>
+                <div className="productQuantity">
+                    <TextField
+                        id="outlined-basic"
+                        label="Quantity"
+                        variant="outlined"
+                        type="number"
+                        required
+                        value={dashBoardFormValues["quantity"]}
+                        onChange={(e) => {
+                            setDashBoardFormValues({
+                                ...dashBoardFormValues,
+                                quantity: e.target.value,
+                            });
+                        }}
+                    />
+                </div>
+                <div className="product_description">
+                    <TextField
+                        id="outlined-basic"
+                        label="Description"
+                        variant="outlined"
+                        required
+                        fullWidth
+                        multiline
+                        value={dashBoardFormValues["product_description"]}
+                        maxRows={4}
+                        onChange={(e) => {
+                            setDashBoardFormValues({
+                                ...dashBoardFormValues,
+                                product_description: e.target.value,
+                            });
+                        }}
+                    />
+                </div>
+                <div className="dashboardFormButton">
+                    <Button
+                        variant="contained"
+                        onClick={() =>
+                            onDashFormSubmission(dashBoardFormValues)
+                        }
+                    >
+                        Add Item
+                    </Button>
+                </div>
             </div>
-            <Button variant="outlined" onClick={SubmitHandler}>
-                Add stock
-            </Button>
-        </form>
+        </div>
     );
 }
+
+export default DashboardForm;

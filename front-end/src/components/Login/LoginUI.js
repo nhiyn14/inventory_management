@@ -1,17 +1,13 @@
 import AssessmentIcon from "@mui/icons-material/Assessment";
-import React, { useState, useSyncExternalStore } from "react";
+import React, { useState } from "react";
 import "./LoginUI.css";
 import Button from "@mui/material/Button";
-import Input from "@mui/material/Input";
 import {  BrowserRouter, Route, Routes, Link, redirect } from "react-router-dom";
 import { StyledEngineProvider, TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import Context from '../../appContext'
-
 import CircularProgress from "@mui/material/CircularProgress";
-import { useContext } from "react";
-const axios = require("axios").default;
-var _ = require("lodash");
+import AxiosInstance from "../../AxiosInstance/Instances";
+
 const token = sessionStorage.getItem("token")
 
 console.log("this is your token", token);
@@ -27,29 +23,25 @@ export default function LoginUI() {
         email: "",
         password: "",
     });
-    function logMeIn(event) {
-        const url = 'http://127.0.0.1:5000/login'
-        axios.post(url, {loginValues})
-            .then((resp) => {
-                if (resp.status == 200)return resp
-                else alert ("there has been an error")
-                console.log(resp);
-            })
-            .then((data) => {
-                console.log(data);
-                console.log("this came from the backend", data.data.access_token);
-                sessionStorage.setItem("token", data.data.access_token)
-                if (data.status == 200 && data.data.access_token != ""){
-                    navigate('/registration')
-                }
-            }).catch((error)=>{
-                console.log(error);
-            })
-
-        // setLoginValues({
-        //     email: "",
-        //     password: "",
-        // });
+    const logMeIn = async (event) => {
+        try {
+            setTokenError(false)
+            const response = await AxiosInstance.post('/login', loginValues)
+            sessionStorage.setItem("token", response.data.access_token)
+            } 
+            catch (error) {
+            console.log(error);
+        } 
+        finally {
+            if (token && token !== null && token !== ""){
+                navigate('/dashboard')
+            }
+            setTokenError(true)
+        }
+        setLoginValues({
+            email: "",
+            password: "",
+        });
 
         event.preventDefault();
     }
@@ -63,20 +55,18 @@ export default function LoginUI() {
                     <CircularProgress className="loadingBar" size={80} />
                 ) : null}
             </header>
-
-            <body>
-            
-                <div className="registrationContainer">
+            <body className="indexBody">
+                <div className="loginContainer">
                     <div className="welcomeText">
                         <h1>Welcome to StockTake</h1>
                         <p>Where all your hopes and dreams come true</p>
                         <p> Please register your details </p>
                     </div>
 
-                    <form className="registrationFormContents">
+                    <form className="loginFormContents">
                         <div className="registrationInputs">
                             <div className="registrationDetail">
-                                <div className="emailInput">
+                                <div className="logEmailInput">
                                     <TextField
                                         value={loginValues["email"]}
                                         onChange={(e) => {
@@ -93,7 +83,7 @@ export default function LoginUI() {
                                         error={emailError}
                                     />
                                 </div>
-                                <div className="passwordInput">
+                                <div className="logPasswordInput">
                                     <TextField
                                         type="password"
                                         value={loginValues["password"]}
@@ -113,13 +103,13 @@ export default function LoginUI() {
                                     {tokenError === true? <p>Error: you're login details are incorrect.</p>: null}
                                 </div>
                             </div>
-                            <div className="registrationButton">
+                            <div className="loginButton">
                                 <Button
                                     variant="contained"
                                     onClick={logMeIn}
                                     fullWidth={true}
                                 >
-                                    Register
+                                    Login
                                 </Button>
                             </div>
                             <p className="routeLink">
@@ -132,7 +122,9 @@ export default function LoginUI() {
                 </div>
                 
             </body>
-            <footer></footer>
+            <footer className="indexFooter">
+
+            </footer>
         </div>
     );
 }

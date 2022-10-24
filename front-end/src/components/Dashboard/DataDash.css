@@ -1,0 +1,33 @@
+.containerDash{
+    display: flex;
+    padding: 1px;
+    align-items: flex-end;
+
+}
+
+.dashboardContents {
+    display: flex;
+    flex-direction: row;
+    border-radius: 15px;
+    justify-content: space-around;
+    width: 900px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: solid 2px #2196f3;
+
+    height: 50px;
+}
+.dashboardContents > div {
+    text-align: center;
+    padding-top: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 10px;
+    width: 12%;
+    height: 100%px;
+    overflow: hidden;
+    
+}
+.dashboardContents > div :hover {
+    opacity: 0.7;
+}
+
