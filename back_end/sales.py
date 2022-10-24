@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Class Sales"""
+"""Class Order"""
 from os import getenv
 from back_end.base_model import BaseModel, Base
 from datetime import datetime
@@ -9,17 +9,11 @@ from sqlalchemy.orm import relationship
 
 
 class Sales(BaseModel, Base):
-    """class def for an orders detail by each product ordered"""
+    """class def for an order"""
     __tablename__ = 'sales'
     user_id = Column(String(60), ForeignKey('user.id'), nullable=False)
-    product_id = Column(String(60),
-                        ForeignKey('product.id'),
-                        nullable=False)
-    sale_price = Column(Float, nullable=False)
-    quantity = Column(Integer, nullable=False)
-    revenue = Column(Float, nullable=False)
-    profit = Column(Float, nullable=False)
+    discount = Column(Float, default=0, nullable=False)
 
     def __init__(self, *args, **kwargs):
-        """initializes OrderDetail"""
+        """initializes Order"""
         super().__init__(*args, **kwargs)
