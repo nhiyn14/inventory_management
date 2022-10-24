@@ -2,7 +2,6 @@
 from os import getenv
 from back_end.base_model import Base
 from back_end.sales import Sales
-from back_end.sales_detail import SalesDetail
 from back_end.product import Product
 from back_end.user import User
 from sqlalchemy import create_engine, delete, update
