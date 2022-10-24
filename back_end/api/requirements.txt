@@ -1,0 +1,4 @@
+# User cmd: pip install -r requirements.txt before using
+flask
+flask_cors
+flask_jwt_extended
