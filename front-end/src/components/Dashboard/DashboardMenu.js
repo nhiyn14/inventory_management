@@ -55,14 +55,15 @@ function DashboardMenu() {
     const populateDashMenu = async () => {
         try {
             setDashLoading(true);
-            const response = await axios.get("https://dummyjson.com/products");
+            const response = await axios.get("/dashboard");
             const initialData = response.data.products.map((data) => ({
                 product_id: data.id,
-                price_wholesale: data.discountPercentage,
-                price_retail: data.price,
-                quantity: data.stock,
-                product_description: data.description,
+                price_wholesale: data.price_wholesale,
+                price_retail: data.price_retail,
+                quantity: data.quantity,
+                product_description: data.product_description,
                 product_name: data.title,
+                product_status: data.product_status
             }));
             const productData2 = [];
             for (const objects in initialData) {
@@ -106,7 +107,7 @@ function DashboardMenu() {
         const product_id = productData[findKey].product_id;
         try {
             const response = await AxiosInstance.post(
-                "/removeproduct",
+                "/deleteproduct",
                 product_id
             );
             console.log(response);
