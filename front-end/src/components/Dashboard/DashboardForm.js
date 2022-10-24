@@ -3,32 +3,28 @@ import "./DashboardForm.css";
 import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import axios from "axios";
-import authorizedCall from '../../AxiosInstance/Instances'
+import authorizedCall from "../../AxiosInstance/Instances";
 import AxiosInstance from "../../AxiosInstance/Instances";
 
-
-function DashboardForm({onDashFormSubmission}) {
-    const [isLoading, setIsLoading] = useState(false)
+function DashboardForm({ onDashFormSubmission }) {
+    const [isLoading, setIsLoading] = useState(false);
     const [dashBoardFormValues, setDashBoardFormValues] = useState({
         price_wholesale: "",
         price_retail: "",
         quantity: "",
         product_description: "",
         product_name: "",
-});
+    });
 
-    const addItem = async () => {
-        try {
-            setIsLoading(true)
-            const response = await AxiosInstance.post("dashboard", dashBoardFormValues);
-            onDashFormSubmission(dashBoardFormValues);
-            console.log(response);
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setIsLoading(false)
-            
-        }
+    const addItem = () => {
+        onDashFormSubmission(dashBoardFormValues);
+        setDashBoardFormValues({
+            price_wholesale: "",
+            price_retail: "",
+            quantity: "",
+            product_description: "",
+            product_name: "",
+        });
     };
 
     return (
@@ -38,7 +34,6 @@ function DashboardForm({onDashFormSubmission}) {
                     <TextField
                         label="Product name"
                         color="primary"
-                        focused
                         fullWidth
                         required
                         value={dashBoardFormValues["product_name"]}
@@ -55,7 +50,6 @@ function DashboardForm({onDashFormSubmission}) {
                         id="outlined-basic"
                         label="Wholesale price"
                         variant="outlined"
-                        focused
                         type="number"
                         required
                         value={dashBoardFormValues["price_wholesale"]}
@@ -73,7 +67,6 @@ function DashboardForm({onDashFormSubmission}) {
                         id="outlined-basic"
                         label="Retail price"
                         variant="outlined"
-                        focused
                         type="number"
                         required
                         value={dashBoardFormValues["price_retail"]}
@@ -90,7 +83,6 @@ function DashboardForm({onDashFormSubmission}) {
                         id="outlined-basic"
                         label="Quantity"
                         variant="outlined"
-                        focused
                         type="number"
                         required
                         value={dashBoardFormValues["quantity"]}
@@ -107,7 +99,6 @@ function DashboardForm({onDashFormSubmission}) {
                         id="outlined-basic"
                         label="Description"
                         variant="outlined"
-                        focused
                         required
                         fullWidth
                         multiline
@@ -122,7 +113,12 @@ function DashboardForm({onDashFormSubmission}) {
                     />
                 </div>
                 <div className="dashboardFormButton">
-                    <Button variant="outlined" onClick={() => onDashFormSubmission(dashBoardFormValues)}>
+                    <Button
+                        variant="contained"
+                        onClick={() =>
+                            onDashFormSubmission(dashBoardFormValues)
+                        }
+                    >
                         Add Item
                     </Button>
                 </div>

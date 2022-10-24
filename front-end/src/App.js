@@ -14,7 +14,6 @@ function App() {
                 <Route path="/registration" element={<RegisterUI />}></Route>
                 <Route path="/" element={<LoginUI />}></Route>
                 <Route path="/dashboard" element={<DashboardMenu/>}></Route>
-                <Route path="/dashdata" element={<DataDash/>}></Route>
             </Routes>
         </BrowserRouter>
     );

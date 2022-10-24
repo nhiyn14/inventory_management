@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import DashboardForm from "./DashboardForm";
 import "./DashboardMenu.css";
+import LogoutIcon from "@mui/icons-material/Logout";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import DataDash from "./DataDash";
-import { dialogActionsClasses } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
+import { Navigate, useNavigate } from "react-router-dom";
 import {
     TextField,
     FormControl,
@@ -12,23 +14,47 @@ import {
     InputLabel,
 } from "@mui/material";
 import Button from "@mui/material/Button";
-import { render } from "react-dom";
 import { useEffect } from "react";
 import AxiosInstance from "../../AxiosInstance/Instances";
 const axios = require("axios");
+const token = sessionStorage.getItem("token");
 
-function DashboardMenu(props) {
+function DashboardMenu() {
+    const navigate = useNavigate(false);
+    const [logOutLoading, setLogOutLoading] = useState(false);
+    const [dashLoading, setDashLoading] = useState(false);
     const [productData, setProductData] = useState([]);
     const [removeProduct, setRemoveProduct] = useState("");
     const [salesData, setSalesData] = useState({
         salesName: "",
         totalSales: "",
     });
-
-
+    const addSalesHandler = async () => {
+        try {
+            const response = await AxiosInstance.post('/newproduct', salesData)
+        } catch (error) {
+            console.log(error);
+        }finally {
+            setSalesData({
+                salesName: "",
+                totalSales: ""
+            })
+            populateDashMenu();
+        }
+    }
+    const logMeOut = () => {
+        setLogOutLoading(true);
+        setTimeout(() => {
+            sessionStorage.removeItem("token");
+        }, 3000);
+        if (!token || token === null || token === undefined) {
+            navigate("/");
+        }
+    };
 
     const populateDashMenu = async () => {
         try {
+            setDashLoading(true);
             const response = await axios.get("https://dummyjson.com/products");
             const initialData = response.data.products.map((data) => ({
                 product_id: data.id,
@@ -44,9 +70,10 @@ function DashboardMenu(props) {
                 productData2.push(parsedData);
             }
             setProductData(productData2);
-            console.log(productData2);
         } catch (error) {
             console.log(error);
+        } finally {
+            setDashLoading(false);
         }
     };
     useEffect(() => {
@@ -54,33 +81,62 @@ function DashboardMenu(props) {
     }, []);
 
     // addProduct data takes dashboardValues as a parameter (this parameter will be used in DashboardForm.js)
-    const addProductData = (newItemValue) => {
-        // const dashValues = { ...dashboardValues };
-        // Call ciennas api, needs to send back 'ok' with product id, replace line below with proper ID.
-        newItemValue.id = productData.length + 1;
-        setProductData((oldProductData) => {
-            return [newItemValue, ...oldProductData];
-        });
-
-        console.log(newItemValue);
+    const addProductData = async (newItemValue) => {
+        try {
+            const response = await AxiosInstance.post(
+                "/newproduct",
+                newItemValue
+            );
+            console.log(response);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            // Call ciennas api, needs to send back 'ok' with product id, replace line below with proper ID.
+            newItemValue.id = productData.length + 1;
+            setProductData((oldProductData) => {
+                return [newItemValue, ...oldProductData];
+            });
+        }
     };
-    const removeProductHandler = (e) => {
+    const removeProductHandler = async (e) => {
         const findKey = productData.findIndex((key) => {
             return key.product_name === removeProduct;
         });
         productData.splice(findKey, 1);
-        console.log(productData);
-        e.preventDefault();
-        setRemoveProduct("");
+        const product_id = productData[findKey].product_id;
+        try {
+            const response = await AxiosInstance.post(
+                "/removeproduct",
+                product_id
+            );
+            console.log(response);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            populateDashMenu();
+            setRemoveProduct("");
+        }
     };
 
     return (
-        <div>
+        <div className="dashboard">
             <header className="dashHeader">
                 <AssessmentIcon sx={{ fontSize: 80 }} />
+                {logOutLoading === false ? (
+                    <div className="logoutIcon">
+                        <LogoutIcon
+                            onClick={logMeOut}
+                            className="logoutIcon"
+                            sx={{ fontSize: 40 }}
+                        />
+                        <p onClick={logMeOut}>Logout</p>
+                    </div>
+                ) : (
+                    <CircularProgress className="logLoading" />
+                )}
                 <h1>StockTake.</h1>
             </header>
-            <body>
+            <body className="dashBody">
                 <div className="dashContainer">
                     <div className="dashEditing">
                         <div className="dashForm">
@@ -91,21 +147,31 @@ function DashboardMenu(props) {
                         </div>
                         <div className="dashSales">
                             <div className="salesName">
-                                <TextField
-                                    focused
-                                    value={salesData["salesName"]}
-                                    onChange={(e) => {
-                                        setSalesData({
-                                            ...salesData,
-                                            salesName: e.target.value,
-                                        });
-                                    }}
-                                    label="Product name"
-                                />
+                                <FormControl fullWidth>
+                                    <InputLabel>Add sales</InputLabel>
+                                    <Select
+                                        label="Please select the product you would like to remove"
+                                        value={salesData['salesName']}
+                                        onChange={(e) => {
+                                            setSalesData({
+                                                ...salesData,
+                                                salesName: e.target.value
+                                            })
+                                        }}
+                                    >
+                                        {productData.map((data) => (
+                                            <MenuItem
+                                                focused
+                                                value={data.product_name}
+                                            >
+                                                {data.product_name}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
                             </div>
                             <div className="totalSales">
                                 <TextField
-                                    focused
                                     value={salesData["totalSales"]}
                                     onChange={(e) => {
                                         setSalesData({
@@ -116,6 +182,12 @@ function DashboardMenu(props) {
                                     label="Total sales"
                                     type="number"
                                 />
+                                <Button
+                                    variant="contained"
+                                    className="salesButton"
+                                    onClick={addSalesHandler}>
+                                    Add sale
+                                </Button>
                             </div>
                         </div>
                         <div className="dashRemove">
@@ -125,19 +197,25 @@ function DashboardMenu(props) {
                                     remove
                                 </InputLabel>
                                 <Select
+                                    className="removeSelect"
                                     label="Please select the product you would like to remove"
                                     value={removeProduct}
                                     onChange={(e) => {
                                         setRemoveProduct(e.target.value);
                                     }}
-                                > 
-                                {productData.map((data)=> (
-                                    <MenuItem value={data.product_name}>{data.product_name}</MenuItem>
-                                ))}
+                                >
+                                    {productData.map((data) => (
+                                        <MenuItem
+                                            
+                                            value={data.product_name}
+                                        >
+                                            {data.product_name}
+                                        </MenuItem>
+                                    ))}
                                 </Select>
                                 <div className="removeProductButton">
                                     <Button
-                                        variant="outlined"
+                                        variant="contained"
                                         onClick={removeProductHandler}
                                     >
                                         Remove item
@@ -145,24 +223,6 @@ function DashboardMenu(props) {
                                 </div>
                             </FormControl>
                         </div>
-                        {/* <div className="dashRemove">
-                            <TextField
-                                focused
-                                value={removeProduct}
-                                onChange={(e) => {
-                                    setRemoveProduct(e.target.value);
-                                }}
-                                label="Product name"
-                            />
-                        </div>
-                        <div className="removeProductButton">
-                            <Button
-                                variant="outlined"
-                                onClick={populateDashMenu}
-                            >
-                                Remove item
-                            </Button>
-                        </div> */}
                     </div>
                     <div className="dashMenu">
                         <div className="menuHeader">
@@ -198,6 +258,12 @@ function DashboardMenu(props) {
                                 productName={dashValues.product_name}
                             />
                         ))}
+                        {dashLoading === true ? (
+                            <CircularProgress
+                                className="dashLoading"
+                                size={80}
+                            />
+                        ) : null}
                     </div>
                 </div>
             </body>

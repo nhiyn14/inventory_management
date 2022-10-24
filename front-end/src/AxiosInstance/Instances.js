@@ -6,5 +6,4 @@ const AxiosInstance = axios.create({
         'Authorization': 'Bearer ' + sessionStorage.getItem("token")
     }
 });
-console.log({AxiosInstance});
 export default AxiosInstance

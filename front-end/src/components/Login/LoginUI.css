@@ -1,10 +1,12 @@
 
-.registrationContainer{
+.loginContainer{
     max-width: fit-content;
     display: flex;
     justify-content: right;
     padding-left: 135px;
     padding: 100px;
+    padding-bottom: 200px;
+
 
 }
 .welcomeText {
