@@ -5,6 +5,9 @@ import { TextField } from "@mui/material";
 import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import { CircularProgress } from '@mui/material';
+import AxiosInstance from "../../AxiosInstance/Instances";
+import { useNavigate } from "react-router-dom";
+
 
 
 
@@ -13,6 +16,7 @@ const axios = require("axios").default;
 
 
 export default function RegisterUI() {
+    const navigate = useNavigate()
     const [isLoading, setIsLoading] = useState(false)
     const [registrationValues, setRegistrationValues] = useState({
         email: "",
@@ -22,21 +26,22 @@ export default function RegisterUI() {
         lastName: "",
     });
 
-    const submitHandler = (e) => {
-        const url = "http://127.0.0.1:5000/registration";
-        e.preventDefault();
-
-        axios.post(url, registrationValues).then(function (response) {
-            response.status === 201 ? setIsLoading(true) : setIsLoading(false)
+    const submitHandler = async (e) => {
+        try {
+            const response = await AxiosInstance.post('/registration', registrationValues)
             console.log(response);
-        });
-        setRegistrationValues({
-            email: "",
-            password: "",
-            confirmedPassword: "",
-            firstName: "",
-            lastName: "",
-        });
+        } catch (error) {
+            console.log(error);
+        } finally {
+            navigate('/')
+            setRegistrationValues({
+                email: "",
+                password: "",
+                confirmedPassword: "",
+                firstName: "",
+                lastName: "",
+            });
+        }
     };
     return (
         <div>
@@ -158,7 +163,7 @@ export default function RegisterUI() {
                                 </Button>
                             </div>
                             <p className="routeLink">
-                                <Link to="/login">
+                                <Link to="/">
                                     Already have an account?
                                 </Link>
                             </p>
