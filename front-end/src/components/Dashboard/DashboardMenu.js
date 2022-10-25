@@ -54,7 +54,7 @@ function DashboardMenu() {
     const populateDashMenu = async () => {
         try {
             setDashLoading(true);
-            const response = await AxiosInstance.get("http://127.0.0.1:5000/dashboard");
+            const response = await AxiosInstance.get("/dashboard");
             const initialData = response.data.map((data) => ({
                 product_id: data.id,
                 price_wholesale: data.price_wholesale,
