@@ -31,9 +31,9 @@ deleteList = []
 
 @app.route('/login', methods=['POST'])
 def create_token():
-    """gets registration information"""
+    """gets login information"""
     loginData = request.get_json()
-    loginValues = loginData['loginValues']
+    loginValues = loginData
     loginList.clear()
     loginList.append(loginValues)
 
@@ -62,13 +62,12 @@ def get_login():
 @app.route('/registration', methods=['POST'])
 def post_registration():
     """gets registration information"""
-    regData = request.get_json()
-    regValues = regData['regValues']
+    regValues = request.get_json()
     regList.clear()
     regList.append(regValues)
 
-    first_name = regValues['first_name']
-    last_name = regValues['last_name']
+    first_name = regValues['firstName']
+    last_name = regValues['lastName']
     email = regValues['email']
     password = regValues['password']
     hashedPassword = hashlib.md5(password.encode()).hexdigest()
@@ -93,11 +92,11 @@ def get_registration():
 
 
 @app.route('/dashboard', methods=['GET'])
+@jwt_required()
 def get_dashboard():
     """posts data from dashboard form"""
     dashboardList.clear()
-    # user_id just for testing purpose
-    user_id = 'fdc9aaa3-c55f-413f-b81f-39199690e236'
+    user_id = get_jwt_identity()
     for each in session.query(Product).where(Product.user_id == user_id):
         product = each.__dict__
         if "_sa_instance_state" in product:
@@ -107,15 +106,16 @@ def get_dashboard():
 
 
 @app.route('/newproduct', methods=['POST'])
+@jwt_required()
 def post_new_product():
     """create a new product in db"""
-    newData = request.get_json()
-    newValues = newData['newValues']
+    newValues = request.get_json()
+    # newValues = newData['newItemValue']
     newList.clear()
     newList.append(newValues)
 
     # user_id just for testing purpose
-    user_id = 'fdc9aaa3-c55f-413f-b81f-39199690e236'
+    user_id = get_jwt_identity()
     product_name = newValues['product_name']
     price_wholesale = newValues['price_wholesale']
     price_retail = newValues['price_retail']
@@ -130,9 +130,9 @@ def post_new_product():
         product_status = "No Stock"
     # check if the product wanted to create exist
     existedProduct = session.execute(select(Product).where(
-                                        (Product.user_id == user_id) &
-                                        (Product.product_name == product_name)
-                                     )).fetchone()
+        (Product.user_id == user_id) &
+        (Product.product_name == product_name)
+    )).fetchone()
     if existedProduct is not None:
         return {"msg": "Product is already existed"}, 409
     else:
@@ -165,17 +165,17 @@ def update_product(product_name):
     product_name = updateValues['product_name']
     # check if the product wanted to update exist
     existedProduct = session.execute(select(Product).where(
-                                        (Product.user_id == user_id) &
-                                        (Product.product_name == product_name)
-                                     )).fetchone()
+        (Product.user_id == user_id) &
+        (Product.product_name == product_name)
+    )).fetchone()
     if existedProduct is None:
         return {"msg": "Product not found"}, 409
     else:
         # check keys that need to be update AND update it
         product = session.query(Product).filter(
-                                          Product.user_id == user_id,
-                                          Product.product_name == product_name
-                                          )
+            Product.user_id == user_id,
+            Product.product_name == product_name
+        )
         if 'price_wholesale' in str(updateList):
             product \
                 .update({"price_wholesale": updateValues['price_wholesale']})
@@ -200,37 +200,41 @@ def update_product(product_name):
     return jsonify(updateList)
 
 
-@app.route('/deleteproduct/<product_name>', methods=['DELETE'])
-def delete_product(product_name):
+@app.route('/deleteproduct', methods=['POST'])
+@jwt_required()
+def post_delete_product():
     """delete an existing product"""
-    deleteValues = {"product_name": product_name}
+    deleteData = request.get_json()
     deleteList.clear()
-    deleteList.append(deleteValues)
+    deleteList.append(deleteData)
 
-    # user_id just for testing purpose
-    user_id = 'fdc9aaa3-c55f-413f-b81f-39199690e234'
-    # check if the product wanted to delete exist
+    product_name = deleteData['product_name']
+    user_id = get_jwt_identity()
+
     existedProduct = session.execute(select(Product).where(
-                                        (Product.user_id == user_id) &
-                                        (Product.product_name == product_name)
-                                     )).fetchone()
+        (Product.user_id == user_id) &
+        (Product.product_name == product_name)
+    )).fetchone()
     if existedProduct is None:
         return {"msg": "Product not found"}, 409
-
-    # check if the product is linked to any sales
     product_id = existedProduct[0].id
     existedSales = session.execute(select(Sales).where(
-                                        (Sales.product_id == product_id)
-                                     )).fetchone()
+        (Sales.product_id == product_id)
+    )).fetchone()
     if existedSales is not None:
         return {"msg": "Unsuccessfully deleted Product. \
                 Product is linked to past sales."}, 403
-    # delete the product
     session.query(Product).filter(
-                                  Product.user_id == user_id,
-                                  Product.product_name == product_name
-                                  ).delete()
+        Product.user_id == user_id,
+        Product.product_name == product_name
+    ).delete()
     session.commit()
+    return {"msg": "Successfully deleted product"}, 200
+
+
+@app.route('/deleteproduct', methods=['GET'])
+def get_delete_product():
+    """delete an existing product"""
     return jsonify(deleteList)
 
 
@@ -246,9 +250,9 @@ def post_new_sales():
     quantity = newValues['quantity']
 
     existedProduct = session.execute(select(Product).where(
-                                        (Product.user_id == user_id) &
-                                        (Product.product_name == product_name)
-                                     )).fetchone()
+        (Product.user_id == user_id) &
+        (Product.product_name == product_name)
+    )).fetchone()
     # check if the product wanted to sale exist
     if existedProduct is None:
         return {"msg": "Product not found"}, 409
@@ -265,9 +269,9 @@ def post_new_sales():
         else:
             product_status = "No Stock"
         session.query(Product).filter(
-                                      Product.user_id == user_id,
-                                      Product.product_name == product_name
-                                      ) \
+            Product.user_id == user_id,
+            Product.product_name == product_name
+        ) \
             .update({"product_status": product_status,
                      "quantity": new_quantity})
     # get all required values ready

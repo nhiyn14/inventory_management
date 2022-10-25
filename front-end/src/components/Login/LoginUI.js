@@ -2,21 +2,20 @@ import AssessmentIcon from "@mui/icons-material/Assessment";
 import React, { useState } from "react";
 import "./LoginUI.css";
 import Button from "@mui/material/Button";
-import {  BrowserRouter, Route, Routes, Link, redirect } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Link, redirect } from "react-router-dom";
 import { StyledEngineProvider, TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import AxiosInstance from "../../AxiosInstance/Instances";
 
-const token = sessionStorage.getItem("token")
+const token = sessionStorage.getItem("token");
 
 console.log("this is your token", token);
 
-
 export default function LoginUI() {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
-    const [tokenError, setTokenError] = useState(false)
+    const [tokenError, setTokenError] = useState(false);
     const [emailError, setEmailError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
     const [loginValues, setLoginValues] = useState({
@@ -25,18 +24,16 @@ export default function LoginUI() {
     });
     const logMeIn = async (event) => {
         try {
-            setTokenError(false)
-            const response = await AxiosInstance.post('/login', loginValues)
-            sessionStorage.setItem("token", response.data.access_token)
-            } 
-            catch (error) {
-            console.log(error);
-        } 
-        finally {
-            if (token && token !== null && token !== ""){
+            const response = await AxiosInstance.post("/login", loginValues);
+            console.log(response);
+            sessionStorage.setItem("token", response.data.access_token);
+            if (token || token !== null || token !== ""){
                 navigate('/dashboard')
             }
-            setTokenError(true)
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setTokenError(false)
         }
         setLoginValues({
             email: "",
@@ -44,7 +41,7 @@ export default function LoginUI() {
         });
 
         event.preventDefault();
-    }
+    };
 
     return (
         <div>
@@ -100,7 +97,12 @@ export default function LoginUI() {
                                         required
                                         error={passwordError}
                                     />
-                                    {tokenError === true? <p>Error: you're login details are incorrect.</p>: null}
+                                    {tokenError === true ? (
+                                        <p>
+                                            Error: you're login details are
+                                            incorrect.
+                                        </p>
+                                    ) : null}
                                 </div>
                             </div>
                             <div className="loginButton">
@@ -113,18 +115,13 @@ export default function LoginUI() {
                                 </Button>
                             </div>
                             <p className="routeLink">
-                                <Link to="/">Don't have an account?</Link>
+                                <Link to="/registration">Don't have an account?</Link>
                             </p>
-                    
                         </div>
                     </form>
-                    
                 </div>
-                
             </body>
-            <footer className="indexFooter">
-
-            </footer>
+            <footer className="indexFooter"></footer>
         </div>
     );
 }

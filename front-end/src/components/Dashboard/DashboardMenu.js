@@ -24,7 +24,7 @@ function DashboardMenu() {
     const [logOutLoading, setLogOutLoading] = useState(false);
     const [dashLoading, setDashLoading] = useState(false);
     const [productData, setProductData] = useState([]);
-    const [removeProduct, setRemoveProduct] = useState("");
+    const [removeProduct, setRemoveProduct] = useState({product_name: ""});
     const [salesData, setSalesData] = useState({
         salesName: "",
         totalSales: "",
@@ -55,14 +55,14 @@ function DashboardMenu() {
     const populateDashMenu = async () => {
         try {
             setDashLoading(true);
-            const response = await axios.get("/dashboard");
-            const initialData = response.data.products.map((data) => ({
+            const response = await AxiosInstance.get("http://127.0.0.1:5000/dashboard");
+            const initialData = response.data.map((data) => ({
                 product_id: data.id,
                 price_wholesale: data.price_wholesale,
                 price_retail: data.price_retail,
                 quantity: data.quantity,
                 product_description: data.product_description,
-                product_name: data.title,
+                product_name: data.product_name,
                 product_status: data.product_status
             }));
             const productData2 = [];
@@ -83,6 +83,7 @@ function DashboardMenu() {
 
     // addProduct data takes dashboardValues as a parameter (this parameter will be used in DashboardForm.js)
     const addProductData = async (newItemValue) => {
+        console.log(newItemValue);
         try {
             const response = await AxiosInstance.post(
                 "/newproduct",
@@ -92,23 +93,13 @@ function DashboardMenu() {
         } catch (error) {
             console.log(error);
         } finally {
-            // Call ciennas api, needs to send back 'ok' with product id, replace line below with proper ID.
-            newItemValue.id = productData.length + 1;
-            setProductData((oldProductData) => {
-                return [newItemValue, ...oldProductData];
-            });
+            populateDashMenu();
         }
     };
     const removeProductHandler = async (e) => {
-        const findKey = productData.findIndex((key) => {
-            return key.product_name === removeProduct;
-        });
-        productData.splice(findKey, 1);
-        const product_id = productData[findKey].product_id;
         try {
             const response = await AxiosInstance.post(
-                "/deleteproduct",
-                product_id
+                "/deleteproduct", removeProduct
             );
             console.log(response);
         } catch (error) {
@@ -117,6 +108,7 @@ function DashboardMenu() {
             populateDashMenu();
             setRemoveProduct("");
         }
+        console.log(removeProduct);
     };
 
     return (
@@ -198,18 +190,19 @@ function DashboardMenu() {
                                     remove
                                 </InputLabel>
                                 <Select
+                                    defaultValue={""}
                                     className="removeSelect"
                                     label="Please select the product you would like to remove"
-                                    value={removeProduct}
+                                    value={removeProduct['product_name']}
                                     onChange={(e) => {
-                                        setRemoveProduct(e.target.value);
+                                        setRemoveProduct({
+                                            product_name: e.target.value
+                                        })
                                     }}
                                 >
                                     {productData.map((data) => (
                                         <MenuItem
-                                            
-                                            value={data.product_name}
-                                        >
+                                            value={data.product_name}>
                                             {data.product_name}
                                         </MenuItem>
                                     ))}
