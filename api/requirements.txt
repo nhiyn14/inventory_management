@@ -1,4 +1,0 @@
-## requirements for inventory_management
-flask_jwt_extended
-Flask 
-flask-cors
