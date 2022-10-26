@@ -13,21 +13,25 @@
     width: 900px;
     padding-top: 10px;
     padding-bottom: 10px;
-    border: solid 2px #2196f3;
-
+    border: solid 2px #1e2f97;
     height: 50px;
+    cursor: pointer;
+    background-color: #1aa7ec;
 }
 .dashboardContents > div {
     text-align: center;
     padding-top: 10px;
-    border: 1px solid #cccccc;
+    border: 1px solid #000000;
     border-radius: 10px;
     width: 12%;
     height: 100%px;
     overflow: hidden;
-    
+    cursor: pointer;
+    background-color: white;
 }
-.dashboardContents > div :hover {
-    opacity: 0.7;
+
+.dashboardContents :hover {
+    opacity: 0.8;
 }
+
 

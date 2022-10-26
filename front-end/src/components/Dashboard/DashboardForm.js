@@ -33,6 +33,7 @@ function DashboardForm({ onDashFormSubmission }) {
             <div className="dashboardInputs">
                 <div className="productName">
                     <TextField
+                    className="textField"
                         label="Product name"
                         color="primary"
                         fullWidth
@@ -48,6 +49,7 @@ function DashboardForm({ onDashFormSubmission }) {
                 </div>
                 <div className="productWholesalePrice">
                     <TextField
+                    className="textField"
                         id="outlined-basic"
                         label="Wholesale price"
                         variant="outlined"
@@ -65,6 +67,7 @@ function DashboardForm({ onDashFormSubmission }) {
                 <div></div>
                 <div className="productRetailPrice">
                     <TextField
+                    className="textField"
                         id="outlined-basic"
                         label="Retail price"
                         variant="outlined"
@@ -81,6 +84,7 @@ function DashboardForm({ onDashFormSubmission }) {
                 </div>
                 <div className="productQuantity">
                     <TextField
+                    className="textField"
                         id="outlined-basic"
                         label="Quantity"
                         variant="outlined"
@@ -97,6 +101,7 @@ function DashboardForm({ onDashFormSubmission }) {
                 </div>
                 <div className="product_description">
                     <TextField
+                    className="textField"
                         id="outlined-basic"
                         label="Description"
                         variant="outlined"

@@ -16,12 +16,13 @@ import {
 import Button from "@mui/material/Button";
 import { useEffect } from "react";
 import AxiosInstance from "../../AxiosInstance/Instances";
-import UpdateProductForm from "./UpdateForm";
+import { makeStyles } from "@mui/styles";
 
 const axios = require("axios");
 const token = sessionStorage.getItem("token");
 
 function DashboardMenu(props) {
+
     const [updateFormValues, setUpdateFormValues] = useState({
         price_wholesale: "",
         price_retail: "",
@@ -176,6 +177,7 @@ function DashboardMenu(props) {
                                 <FormControl fullWidth>
                                     <InputLabel>Add sales</InputLabel>
                                     <Select
+                                        className="textField"
                                         label="Add sales"
                                         value={salesData["salesName"]}
                                         onChange={(e) => {
@@ -199,6 +201,7 @@ function DashboardMenu(props) {
                             </div>
                             <div className="totalSales">
                                 <TextField
+                                    className="textField"
                                     value={salesData["totalSales"]}
                                     onChange={(e) => {
                                         setSalesData({
@@ -225,8 +228,8 @@ function DashboardMenu(props) {
                                     remove
                                 </InputLabel>
                                 <Select
-                                    defaultValue={""}
-                                    className="removeSelect"
+                                    
+                                    className="textField"
                                     label="Please select the product you would like to remove"
                                     value={removeProduct["product_name"]}
                                     onChange={(e) => {
@@ -260,6 +263,7 @@ function DashboardMenu(props) {
                                     <FormControl fullWidth>
                                         <InputLabel>Add sales</InputLabel>
                                         <Select
+                                            className="textField"
                                             label="Update products"
                                             value={
                                                 updateFormValues["product_name"]
@@ -288,6 +292,7 @@ function DashboardMenu(props) {
                                 </div>
                                 <div className="productWholesalePrice">
                                     <TextField
+                                        className="textField"
                                         id="outlined-basic"
                                         label="Wholesale price"
                                         variant="outlined"
@@ -306,6 +311,7 @@ function DashboardMenu(props) {
                                 <div></div>
                                 <div className="productRetailPrice">
                                     <TextField
+                                        className="textField"
                                         id="outlined-basic"
                                         label="Retail price"
                                         variant="outlined"
@@ -321,6 +327,7 @@ function DashboardMenu(props) {
                                 </div>
                                 <div className="productQuantity">
                                     <TextField
+                                    className="textField"
                                         id="outlined-basic"
                                         label="Quantity"
                                         variant="outlined"
@@ -336,6 +343,7 @@ function DashboardMenu(props) {
                                 </div>
                                 <div className="product_description">
                                     <TextField
+                                    className="textField"
                                         id="outlined-basic"
                                         label="Description"
                                         variant="outlined"
