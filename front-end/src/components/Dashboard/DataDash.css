@@ -18,7 +18,7 @@
     cursor: pointer;
     background-color: #1aa7ec;
 }
-.dashboardContents > div {
+/* .dashboardContents > div {
     text-align: center;
     padding-top: 10px;
     border: 1px solid #000000;
@@ -28,8 +28,85 @@
     overflow: hidden;
     cursor: pointer;
     background-color: white;
+} */
+.menuCost {
+    text-align: center;
+    padding-top: 10px;
+    border: 1px solid #000000;
+    border-radius: 10px;
+    width: 12%;
+    height: 100%px;
+    overflow: hidden;
+    cursor: pointer;
+    background-color: #797ef6;
+    color: white;
+    font-size: 20px;
 }
-
+.menuName {
+    text-align: center;
+    padding-top: 10px;
+    border: 1px solid #000000;
+    border-radius: 10px;
+    width: 12%;
+    height: 100%px;
+    overflow: hidden;
+    cursor: pointer;
+    background-color: #797ef6;
+    color: white;
+    font-size: 20px;
+}
+.menuRetail {
+    text-align: center;
+    padding-top: 10px;
+    border: 1px solid #000000;
+    border-radius: 10px;
+    width: 12%;
+    height: 100%px;
+    overflow: hidden;
+    cursor: pointer;
+    background-color: #797ef6;
+    color: white;
+    font-size: 20px;
+}
+.menuQuantity {
+    text-align: center;
+    padding-top: 10px;
+    border: 1px solid #000000;
+    border-radius: 10px;
+    width: 12%;
+    height: 100%px;
+    overflow: hidden;
+    cursor: pointer;
+    background-color: #797ef6;
+    color: white;
+    font-size: 20px;
+}
+.menuDescription {
+    text-align: center;
+    padding-top: 10px;
+    border: 1px solid #000000;
+    border-radius: 10px;
+    width: 12%;
+    height: 100%px;
+    overflow: hidden;
+    cursor: pointer;
+    background-color: #797ef6;
+    color: white;
+    font-size: 13px;
+}
+.lowStock {
+    text-align: center;
+    padding-top: 10px;
+    border: 1px solid #000000;
+    border-radius: 10px;
+    width: 12%;
+    height: 100%px;
+    overflow: hidden;
+    cursor: pointer;
+    background-color: #ffba4a;
+    color: white;
+    font-size: 13px;
+}
 .dashboardContents :hover {
     opacity: 0.8;
 }

@@ -18,10 +18,18 @@ import { useEffect } from "react";
 import AxiosInstance from "../../AxiosInstance/Instances";
 import { makeStyles } from "@mui/styles";
 
+const useStyles = makeStyles({
+    input: {
+        backgroundColor: "white",
+        borderRadius: "10px",
+    },
+});
+
 const axios = require("axios");
 const token = sessionStorage.getItem("token");
 
 function DashboardMenu(props) {
+    const styles = useStyles();
 
     const [updateFormValues, setUpdateFormValues] = useState({
         price_wholesale: "",
@@ -177,7 +185,7 @@ function DashboardMenu(props) {
                                 <FormControl fullWidth>
                                     <InputLabel>Add sales</InputLabel>
                                     <Select
-                                        className="textField"
+                                        className={styles.input}
                                         label="Add sales"
                                         value={salesData["salesName"]}
                                         onChange={(e) => {
@@ -201,7 +209,7 @@ function DashboardMenu(props) {
                             </div>
                             <div className="totalSales">
                                 <TextField
-                                    className="textField"
+                                    className={styles.input}
                                     value={salesData["totalSales"]}
                                     onChange={(e) => {
                                         setSalesData({
@@ -228,8 +236,7 @@ function DashboardMenu(props) {
                                     remove
                                 </InputLabel>
                                 <Select
-                                    
-                                    className="textField"
+                                    className={styles.input}
                                     label="Please select the product you would like to remove"
                                     value={removeProduct["product_name"]}
                                     onChange={(e) => {
@@ -263,7 +270,7 @@ function DashboardMenu(props) {
                                     <FormControl fullWidth>
                                         <InputLabel>Add sales</InputLabel>
                                         <Select
-                                            className="textField"
+                                            className={styles.input}
                                             label="Update products"
                                             value={
                                                 updateFormValues["product_name"]
@@ -292,7 +299,7 @@ function DashboardMenu(props) {
                                 </div>
                                 <div className="productWholesalePrice">
                                     <TextField
-                                        className="textField"
+                                        className={styles.input}
                                         id="outlined-basic"
                                         label="Wholesale price"
                                         variant="outlined"
@@ -311,7 +318,7 @@ function DashboardMenu(props) {
                                 <div></div>
                                 <div className="productRetailPrice">
                                     <TextField
-                                        className="textField"
+                                        className={styles.input}
                                         id="outlined-basic"
                                         label="Retail price"
                                         variant="outlined"
@@ -327,7 +334,7 @@ function DashboardMenu(props) {
                                 </div>
                                 <div className="productQuantity">
                                     <TextField
-                                    className="textField"
+                                        className={styles.input}
                                         id="outlined-basic"
                                         label="Quantity"
                                         variant="outlined"
@@ -343,7 +350,7 @@ function DashboardMenu(props) {
                                 </div>
                                 <div className="product_description">
                                     <TextField
-                                    className="textField"
+                                        className={styles.input}
                                         id="outlined-basic"
                                         label="Description"
                                         variant="outlined"
