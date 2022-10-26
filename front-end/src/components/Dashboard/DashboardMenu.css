@@ -82,18 +82,23 @@
 }
 .dashRemove {
     position: relative;
-    left: 3px;
-    bottom: 100px;
+    left: 58px;
+    bottom: 90px;
+    width: 350px;
 }
 
 .removeSelect {
     position: relative;
     right: 12px;
+
 }
 .removeProductButton {
     position: relative;
-    bottom: -40px;
-    right: -150px;
+    bottom: -10px;
+    right: -95px;
+}
+.productName {
+    width: 200px;
 }
 .dashSales {
     display: flex;
@@ -118,7 +123,7 @@
 }
 .salesButton {
     position: absolute;
-    bottom: -20px;
+    bottom: -10px;
     left: -50px;
 }
 .menuHeader {

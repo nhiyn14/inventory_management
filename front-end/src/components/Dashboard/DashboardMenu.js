@@ -232,12 +232,11 @@ function DashboardMenu(props) {
                         <div className="dashRemove">
                             <FormControl fullWidth>
                                 <InputLabel>
-                                    Please select the product you would like to
-                                    remove
+                                    Remove products
                                 </InputLabel>
                                 <Select
                                     className={styles.input}
-                                    label="Please select the product you would like to remove"
+                                    label="Remove products"
                                     value={removeProduct["product_name"]}
                                     onChange={(e) => {
                                         setRemoveProduct({
