@@ -2,17 +2,11 @@ import React, { useState } from "react";
 import "./RegisterUI.css";
 import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
-import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import { CircularProgress } from '@mui/material';
 import AxiosInstance from "../../AxiosInstance/Instances";
 import { useNavigate } from "react-router-dom";
-
-
-
-
-const axios = require("axios").default;
-
 
 
 export default function RegisterUI() {

@@ -2,23 +2,22 @@ import React from "react";
 import './DataDash.css'
 
 function DataDash(props) {
-
     return (
         <div className="containerDash">
         <div className="dashboardContents">
-            <div className="dashProductName">
+            <div className="menuName">
                 {props.productName}
             </div>
-            <div className="dashProductWholesalePrice">
+            <div className="menuCost">
                 {props.productWholesalePrice}
             </div>
-            <div className="dashProductRetailPrice">
+            <div className="menuRetail">
                 {props.productRetailPrice}
             </div>
-            <div className="dashProductQuantity">
+            <div className="menuQuantity">
                 {props.productQuantity}
             </div>
-            <div className="dashproductDescription">
+            <div className="menuDescription">
                 {props.productDescription}
             </div>
 
