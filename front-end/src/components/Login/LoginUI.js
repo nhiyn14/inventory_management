@@ -47,7 +47,7 @@ export default function LoginUI() {
         <div>
             <header>
                 <AssessmentIcon sx={{ fontSize: 80 }} />
-                <h1>StockTake.</h1>
+                <h1>StockMate.</h1>
                 {isLoading === true ? (
                     <CircularProgress className="loadingBar" size={80} />
                 ) : null}

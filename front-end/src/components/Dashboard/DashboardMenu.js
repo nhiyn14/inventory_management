@@ -132,7 +132,7 @@ function DashboardMenu() {
                 ) : (
                     <CircularProgress className="logLoading" />
                 )}
-                <h1>StockTake.</h1>
+                <h1>StockMate.</h1>
             </header>
             <body className="dashBody">
                 <div className="dashContainer">
