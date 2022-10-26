@@ -157,7 +157,6 @@ def get_new_product():
 def post_updateproduct():
     """update information of an existing product"""
     updateValues = request.get_json()
-    print("got to line 160")
     updateList.clear()
     updateList.append(updateValues)
 
@@ -209,7 +208,6 @@ def post_updateproduct():
             ) \
                 .update({"product_status": quantity})
         if 'new_prod_name' in str(updateList):
-            print("it got here")
             session.query(Product).filter(
                 Product.user_id == user_id,
                 Product.product_name == product_name
@@ -267,12 +265,11 @@ def get_delete_product():
 @jwt_required()
 def post_new_sales():
     """create a new sales in db"""
-    newValues = request.get_json()
-
+    newSaleValues = request.get_json()
     # user_id just for testing purpose
     user_id = get_jwt_identity()
-    product_name = newValues['salesName']
-    quantity = newValues['totalSales']
+    product_name = newSaleValues['salesName']
+    quantity = newSaleValues['totalSales']
 
     existedProduct = session.execute(select(Product).where(
         (Product.user_id == user_id) &

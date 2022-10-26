@@ -100,8 +100,8 @@
 }
 .salesButton {
     position: absolute;
-    bottom: -70px;
-    left: -240px;
+    bottom: -20px;
+    left: -50px;
 }
 .menuHeader {
     position: sticky;

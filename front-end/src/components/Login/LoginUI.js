@@ -27,13 +27,12 @@ export default function LoginUI() {
             const response = await AxiosInstance.post("/login", loginValues);
             console.log(response);
             sessionStorage.setItem("token", response.data.access_token);
-            if (token || token !== null || token !== ""){
-                navigate('/dashboard')
-            }
+            AxiosInstance.defaults.headers["Authorization"] = `Bearer ${response.data.access_token}`;
+            navigate("/dashboard");
         } catch (error) {
             console.log(error);
         } finally {
-            setTokenError(false)
+            setTokenError(false);
         }
         setLoginValues({
             email: "",
@@ -52,7 +51,7 @@ export default function LoginUI() {
                     <CircularProgress className="loadingBar" size={80} />
                 ) : null}
             </header>
-            <body className="indexBody">
+            <div className="indexBody">
                 <div className="loginContainer">
                     <div className="welcomeText">
                         <h1>Welcome to StockMate</h1>
@@ -115,12 +114,14 @@ export default function LoginUI() {
                                 </Button>
                             </div>
                             <p className="routeLink">
-                                <Link to="/registration">Don't have an account?</Link>
+                                <Link to="/registration">
+                                    Don't have an account?
+                                </Link>
                             </p>
                         </div>
                     </form>
                 </div>
-            </body>
+            </div>
             <footer className="indexFooter"></footer>
         </div>
     );

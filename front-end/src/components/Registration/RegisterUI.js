@@ -50,7 +50,7 @@ export default function RegisterUI() {
                 <h1>StockTake.</h1> 
                 {isLoading === true ? <CircularProgress className="loadingBar" size={80}/> : null}
             </header>
-            <body className="indexBody">
+            <div className="indexBody">
                 <div className="registrationContainer">
                     <div className="welcomeText">
                         <h1>Welcome to StockTake</h1>
@@ -170,7 +170,7 @@ export default function RegisterUI() {
                         </div>
                     </form>
                 </div>
-            </body>
+            </div>
             <footer className="indexFooter">
                 
             </footer>
