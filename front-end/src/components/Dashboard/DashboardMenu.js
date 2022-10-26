@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import DashboardForm from "./DashboardForm";
 import "./DashboardMenu.css";
+import { useNavigate } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import DataDash from "./DataDash";
 import CircularProgress from "@mui/material/CircularProgress";
-import { Navigate, useNavigate } from "react-router-dom";
+
 import {
     TextField,
     FormControl,
@@ -18,6 +19,7 @@ import { useEffect } from "react";
 import AxiosInstance from "../../AxiosInstance/Instances";
 import { makeStyles } from "@mui/styles";
 
+
 const useStyles = makeStyles({
     input: {
         backgroundColor: "white",
@@ -29,7 +31,9 @@ const axios = require("axios");
 const token = sessionStorage.getItem("token");
 
 function DashboardMenu(props) {
+    const navigate = useNavigate();
     const styles = useStyles();
+
 
     const [updateFormValues, setUpdateFormValues] = useState({
         price_wholesale: "",
@@ -38,7 +42,7 @@ function DashboardMenu(props) {
         product_description: "",
         product_name: "",
     });
-    const navigate = useNavigate(false);
+    // const navigate = useNavigate(false);
     const [logOutLoading, setLogOutLoading] = useState(false);
     const [dashLoading, setDashLoading] = useState(false);
     const [productData, setProductData] = useState([]);
@@ -230,12 +234,13 @@ function DashboardMenu(props) {
                             </div>
                         </div>
                         <div className="dashRemove">
+                            <div className="removeInput">
                             <FormControl fullWidth>
                                 <InputLabel>
                                     Remove products
                                 </InputLabel>
                                 <Select
-                                    className={styles.input}
+                                    className="textfield"
                                     label="Remove products"
                                     value={removeProduct["product_name"]}
                                     onChange={(e) => {
@@ -253,6 +258,8 @@ function DashboardMenu(props) {
                                         </MenuItem>
                                     ))}
                                 </Select>
+                                </FormControl>
+                                </div>
                                 <div className="removeProductButton">
                                     <Button
                                         variant="contained"
@@ -261,7 +268,8 @@ function DashboardMenu(props) {
                                         Remove item
                                     </Button>
                                 </div>
-                            </FormControl>
+                            
+                            
                         </div>
                         <div className="container">
                             <div className="updateInputs">

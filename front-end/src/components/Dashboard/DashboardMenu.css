@@ -28,6 +28,13 @@
     border-radius: 10px;
     border: 2px solid #0080ff; 
 }
+.textfield {
+    background-color: white;
+    border-radius: 10px;
+    width: 250px;
+    position: relative;
+
+}
 .dashMenu {
     display: flex;
     flex-direction: column;
@@ -77,25 +84,31 @@
     flex-wrap: wrap;
     justify-content: center;
     position: relative;
-    bottom: 40px;
-
+    bottom: 75px;
+    border: 3px solid white;
+    border-radius: 15px;
 }
 .dashRemove {
     position: relative;
-    left: 58px;
+    left: -0px;
     bottom: 90px;
-    width: 350px;
+    width: 359px;
+    padding-right: 48px;
+    height: 115px;
+    border: 3px solid white;
+    border-radius: 15px;
+    width: 400px;
 }
-
-.removeSelect {
+.removeInput {
     position: relative;
-    right: 12px;
-
+    right: -80px;
+    bottom: -8px;
 }
+
 .removeProductButton {
     position: relative;
-    bottom: -10px;
-    right: -95px;
+    bottom: -15px;
+    right: -140px;
 }
 .productName {
     width: 200px;
@@ -105,26 +118,28 @@
     flex-direction: row;
     padding-left: 60px;
     padding-top: 20px;
-    position: relative;
-    top: -80px;
     height: 100px;
+    border: 3px solid white;
+    border-radius: 15px;
+    position: relative;
+    top: -110px;
+    width: 388px;
 }
 .salesName {
     padding-right: 8px;
     position: relative;
-    left: -5px;
-    top: -50px;
+    bottom: 10px;
     width: 150px;
 }
 .totalSales {
-    padding-right: 8px;
     position: relative;
-    top: -50px;
+    bottom: 10px;
 }
+
 .salesButton {
-    position: absolute;
-    bottom: -10px;
-    left: -50px;
+    position: relative;
+    bottom: -5px;
+    left: -35px;
 }
 .menuHeader {
     position: sticky;
@@ -161,4 +176,5 @@ p {
 }
 .updateProduct {
     padding: 100px;
+
 }
