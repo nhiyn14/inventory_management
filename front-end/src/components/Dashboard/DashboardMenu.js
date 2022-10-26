@@ -16,39 +16,60 @@ import {
 import Button from "@mui/material/Button";
 import { useEffect } from "react";
 import AxiosInstance from "../../AxiosInstance/Instances";
+import UpdateProductForm from "./UpdateForm";
+
 const axios = require("axios");
 const token = sessionStorage.getItem("token");
 
-function DashboardMenu() {
+function DashboardMenu(props) {
+    const [updateFormValues, setUpdateFormValues] = useState({
+        price_wholesale: "",
+        price_retail: "",
+        quantity: "",
+        product_description: "",
+        product_name: "",
+    });
     const navigate = useNavigate(false);
     const [logOutLoading, setLogOutLoading] = useState(false);
     const [dashLoading, setDashLoading] = useState(false);
     const [productData, setProductData] = useState([]);
-    const [removeProduct, setRemoveProduct] = useState({product_name: ""});
+    const [removeProduct, setRemoveProduct] = useState({ product_name: "" });
     const [salesData, setSalesData] = useState({
         salesName: "",
         totalSales: "",
     });
     const addSalesHandler = async () => {
+        // try {
+        //     const response = await AxiosInstance.post('/newsales', salesData)
+        //     console.log(response);
+        // } catch (error) {
+        //     console.log(error);
+        // }finally {
+        //     setSalesData({
+        //         salesName: "",
+        //         totalSales: ""
+        //     })
+        //     populateDashMenu();
+        // }
+        // console.log(salesData);
+    };
+    const updateProductHandler = async () => {
         try {
-            const response = await AxiosInstance.post('/newproduct', salesData)
+            setDashLoading(true)
+            const response = await AxiosInstance.post('/updateproduct', updateFormValues)
             console.log(response);
         } catch (error) {
             console.log(error);
-        }finally {
-            setSalesData({
-                salesName: "",
-                totalSales: ""
-            })
-            populateDashMenu();
+        } finally {
+            setDashLoading(false)
+            populateDashMenu()
         }
-        console.log(salesData);
-    }
-
+        console.log(updateFormValues);
+    };
     const logMeOut = () => {
-        setLogOutLoading(true)
-        sessionStorage.removeItem("token")
-        setTimeout(navigate('/'), 2000)
+        setLogOutLoading(true);
+        sessionStorage.removeItem("token");
+        setTimeout(navigate("/"), 2000);
     };
 
     const populateDashMenu = async () => {
@@ -62,7 +83,7 @@ function DashboardMenu() {
                 quantity: data.quantity,
                 product_description: data.product_description,
                 product_name: data.product_name,
-                product_status: data.product_status
+                product_status: data.product_status,
             }));
             const productData2 = [];
             for (const objects in initialData) {
@@ -83,33 +104,36 @@ function DashboardMenu() {
     // addProduct data takes dashboardValues as a parameter (this parameter will be used in DashboardForm.js)
     const addProductData = async (newItemValue) => {
         console.log(newItemValue);
-        try {
-            const response = await AxiosInstance.post(
-                "/newproduct",
-                newItemValue
-            );
-            console.log(response);
-        } catch (error) {
-            console.log(error);
-        } finally {
-            populateDashMenu();
-        }
+        console.log(productData);
+        // try {
+        //     const response = await AxiosInstance.post(
+        //         "/newproduct",
+        //         newItemValue
+        //     );
+        //     console.log(response);
+        // } catch (error) {
+        //     console.log(error);
+        // } finally {
+        //     populateDashMenu();
+        // }
     };
+    const updateProductData = async () => {};
     const removeProductHandler = async (e) => {
         const findKey = productData.findIndex((key) => {
             return key.product_name === removeProduct;
         });
         productData.splice(findKey, 1);
         try {
-            setDashLoading(true)
+            setDashLoading(true);
             const response = await AxiosInstance.post(
-                "/deleteproduct", removeProduct
+                "/deleteproduct",
+                removeProduct
             );
             console.log(response);
         } catch (error) {
             console.log(error);
         } finally {
-            setDashLoading(false)
+            setDashLoading(false);
             populateDashMenu();
             setRemoveProduct("");
         }
@@ -143,18 +167,19 @@ function DashboardMenu() {
                                 onDashFormSubmission={addProductData}
                             />
                         </div>
+
                         <div className="dashSales">
                             <div className="salesName">
                                 <FormControl fullWidth>
                                     <InputLabel>Add sales</InputLabel>
                                     <Select
-                                        label="Please select the product you would like to remove"
-                                        value={salesData['salesName']}
+                                        label="Add sales"
+                                        value={salesData["salesName"]}
                                         onChange={(e) => {
                                             setSalesData({
                                                 ...salesData,
-                                                salesName: e.target.value
-                                            })
+                                                salesName: e.target.value,
+                                            });
                                         }}
                                     >
                                         {productData.map((data) => (
@@ -183,7 +208,8 @@ function DashboardMenu() {
                                 <Button
                                     variant="contained"
                                     className="salesButton"
-                                    onClick={addSalesHandler}>
+                                    onClick={addSalesHandler}
+                                >
                                     Add sale
                                 </Button>
                             </div>
@@ -222,6 +248,102 @@ function DashboardMenu() {
                                 </div>
                             </FormControl>
                         </div>
+                            <div className="container">
+            <div className="updateInputs">
+                <div className="productName">
+                    <FormControl fullWidth>
+                        <InputLabel>Add sales</InputLabel>
+                        <Select
+                            label="Update products"
+                            value={updateFormValues["product_name"]}
+                            onChange={(e) => {
+                                setUpdateFormValues({
+                                    ...updateFormValues,
+                                    product_name: e.target.value,
+                                });
+                            }}
+                        >
+                            {productData && productData.map((data) => (
+                                <MenuItem value={data.product_name}>
+                                    {data.product_name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </div>
+                <div className="productWholesalePrice">
+                    <TextField
+                        id="outlined-basic"
+                        label="Wholesale price"
+                        variant="outlined"
+                        type="number"
+                        value={updateFormValues["price_wholesale"]}
+                        onChange={(e) => {
+                            setUpdateFormValues({
+                                ...updateFormValues,
+                                price_wholesale: e.target.value,
+                            });
+                        }}
+                    />
+                </div>
+                <div></div>
+                <div className="productRetailPrice">
+                    <TextField
+                        id="outlined-basic"
+                        label="Retail price"
+                        variant="outlined"
+                        type="number"
+                        value={updateFormValues["price_retail"]}
+                        onChange={(e) => {
+                            setUpdateFormValues({
+                                ...updateFormValues,
+                                price_retail: e.target.value,
+                            });
+                        }}
+                    />
+                </div>
+                <div className="productQuantity">
+                    <TextField
+                        id="outlined-basic"
+                        label="Quantity"
+                        variant="outlined"
+                        type="number"
+                        value={updateFormValues["quantity"]}
+                        onChange={(e) => {
+                            setUpdateFormValues({
+                                ...updateFormValues,
+                                quantity: e.target.value,
+                            });
+                        }}
+                    />
+                </div>
+                <div className="product_description">
+                    <TextField
+                        id="outlined-basic"
+                        label="Description"
+                        variant="outlined"
+                        fullWidth
+                        multiline
+                        value={updateFormValues["product_description"]}
+                        maxRows={4}
+                        onChange={(e) => {
+                            setUpdateFormValues({
+                                ...updateFormValues,
+                                product_description: e.target.value,
+                            });
+                        }}
+                    />
+                </div>
+                <div className="dashboardFormButton">
+                    <Button
+                        variant="contained"
+                        onClick={updateProductHandler}
+                    >
+                        Update Item
+                    </Button>
+                </div>
+            </div>
+        </div>
                     </div>
                     <div className="dashMenu">
                         <div className="menuHeader">
