@@ -32,6 +32,7 @@ function DashboardMenu() {
     const addSalesHandler = async () => {
         try {
             const response = await AxiosInstance.post('/newproduct', salesData)
+            console.log(response);
         } catch (error) {
             console.log(error);
         }finally {
@@ -41,15 +42,13 @@ function DashboardMenu() {
             })
             populateDashMenu();
         }
+        console.log(salesData);
     }
+
     const logMeOut = () => {
-        setLogOutLoading(true);
-        setTimeout(() => {
-            sessionStorage.removeItem("token");
-        }, 3000);
-        if (!token || token === null || token === undefined) {
-            navigate("/");
-        }
+        setLogOutLoading(true)
+        sessionStorage.removeItem("token")
+        setTimeout(navigate('/'), 2000)
     };
 
     const populateDashMenu = async () => {
@@ -97,7 +96,12 @@ function DashboardMenu() {
         }
     };
     const removeProductHandler = async (e) => {
+        const findKey = productData.findIndex((key) => {
+            return key.product_name === removeProduct;
+        });
+        productData.splice(findKey, 1);
         try {
+            setDashLoading(true)
             const response = await AxiosInstance.post(
                 "/deleteproduct", removeProduct
             );
@@ -105,6 +109,7 @@ function DashboardMenu() {
         } catch (error) {
             console.log(error);
         } finally {
+            setDashLoading(false)
             populateDashMenu();
             setRemoveProduct("");
         }
