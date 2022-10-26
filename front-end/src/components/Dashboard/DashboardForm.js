@@ -2,13 +2,10 @@ import React, { useState } from "react";
 import "./DashboardForm.css";
 import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
-import axios from "axios";
-import authorizedCall from "../../AxiosInstance/Instances";
-import AxiosInstance from "../../AxiosInstance/Instances";
+
 
 function DashboardForm({ onDashFormSubmission }) {
-    const [isLoading, setIsLoading] = useState(false);
-    const [dashBoardFormValues, setDashBoardFormValues] = useState({
+        const [dashBoardFormValues, setDashBoardFormValues] = useState({
         price_wholesale: "",
         price_retail: "",
         quantity: "",
@@ -33,6 +30,7 @@ function DashboardForm({ onDashFormSubmission }) {
             <div className="dashboardInputs">
                 <div className="productName">
                     <TextField
+                    sx={{border: '1px solid black'}}
                     className="textField"
                         label="Product name"
                         color="primary"
@@ -49,6 +47,7 @@ function DashboardForm({ onDashFormSubmission }) {
                 </div>
                 <div className="productWholesalePrice">
                     <TextField
+                    sx={{border: '1px solid black'}}
                     className="textField"
                         id="outlined-basic"
                         label="Wholesale price"
@@ -67,6 +66,7 @@ function DashboardForm({ onDashFormSubmission }) {
                 <div></div>
                 <div className="productRetailPrice">
                     <TextField
+                    sx={{border: '1px solid black'}}
                     className="textField"
                         id="outlined-basic"
                         label="Retail price"
@@ -84,6 +84,7 @@ function DashboardForm({ onDashFormSubmission }) {
                 </div>
                 <div className="productQuantity">
                     <TextField
+                    sx={{border: '1px solid black'}}
                     className="textField"
                         id="outlined-basic"
                         label="Quantity"
@@ -101,6 +102,7 @@ function DashboardForm({ onDashFormSubmission }) {
                 </div>
                 <div className="product_description">
                     <TextField
+                    sx={{border: '1px solid black'}}
                     className="textField"
                         id="outlined-basic"
                         label="Description"

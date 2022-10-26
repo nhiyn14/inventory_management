@@ -176,5 +176,9 @@ p {
 }
 .updateProduct {
     padding: 100px;
-
+}
+.updateButton {
+    position: relative;
+    bottom: -8px;
+    right: 115px;
 }

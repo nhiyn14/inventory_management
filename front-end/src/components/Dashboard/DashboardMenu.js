@@ -24,10 +24,10 @@ const useStyles = makeStyles({
     input: {
         backgroundColor: "white",
         borderRadius: "10px",
+        border: "1px solid black"
     },
 });
 
-const axios = require("axios");
 const token = sessionStorage.getItem("token");
 
 function DashboardMenu(props) {
@@ -42,7 +42,6 @@ function DashboardMenu(props) {
         product_description: "",
         product_name: "",
     });
-    // const navigate = useNavigate(false);
     const [logOutLoading, setLogOutLoading] = useState(false);
     const [dashLoading, setDashLoading] = useState(false);
     const [productData, setProductData] = useState([]);
@@ -133,8 +132,7 @@ function DashboardMenu(props) {
             populateDashMenu();
         }
     };
-    const updateProductData = async () => {};
-    const removeProductHandler = async (e) => {
+        const removeProductHandler = async (e) => {
         const findKey = productData.findIndex((key) => {
             return key.product_name === removeProduct;
         });
@@ -213,6 +211,7 @@ function DashboardMenu(props) {
                             </div>
                             <div className="totalSales">
                                 <TextField
+                                sx={{border: '1px solid black'}}
                                     className={styles.input}
                                     value={salesData["totalSales"]}
                                     onChange={(e) => {
@@ -240,6 +239,7 @@ function DashboardMenu(props) {
                                     Remove products
                                 </InputLabel>
                                 <Select
+                                    sx={{border: '1px solid black'}}
                                     className="textfield"
                                     label="Remove products"
                                     value={removeProduct["product_name"]}
@@ -306,6 +306,7 @@ function DashboardMenu(props) {
                                 </div>
                                 <div className="productWholesalePrice">
                                     <TextField
+                                    sx={{border: '1px solid black'}}
                                         className={styles.input}
                                         id="outlined-basic"
                                         label="Wholesale price"
@@ -325,6 +326,7 @@ function DashboardMenu(props) {
                                 <div></div>
                                 <div className="productRetailPrice">
                                     <TextField
+                                    sx={{border: '1px solid black'}}
                                         className={styles.input}
                                         id="outlined-basic"
                                         label="Retail price"
@@ -341,6 +343,7 @@ function DashboardMenu(props) {
                                 </div>
                                 <div className="productQuantity">
                                     <TextField
+                                    sx={{border: '1px solid black'}}
                                         className={styles.input}
                                         id="outlined-basic"
                                         label="Quantity"
@@ -357,6 +360,7 @@ function DashboardMenu(props) {
                                 </div>
                                 <div className="product_description">
                                     <TextField
+                                        sx={{border: '1px solid black'}}
                                         className={styles.input}
                                         id="outlined-basic"
                                         label="Description"
@@ -378,7 +382,7 @@ function DashboardMenu(props) {
                                         }}
                                     />
                                 </div>
-                                <div className="dashboardFormButton">
+                                <div className="updateButton">
                                     <Button
                                         variant="contained"
                                         onClick={updateProductHandler}
