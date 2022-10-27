@@ -33,7 +33,7 @@ function DashboardForm({ onDashFormSubmission }) {
                     InputLabelProps={{shrink: false}}
                     sx={{border: '1px solid black'}}
                     className="textField"
-                        label={dashBoardFormValues['product_description'] === "" ? "Product name" : ""}
+                        label={dashBoardFormValues['product_name'] === "" ? "Product name" : ""}
                         color="primary"
                         fullWidth
                         required
