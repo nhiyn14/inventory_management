@@ -26,7 +26,7 @@
     padding-right: 300px;
     padding-top: 300px;
     padding-left: 190px;
-
+    position: relative;
 }
 
 .welcomeText>h1 {
@@ -43,8 +43,8 @@
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    width: 500px;
-    height: 450px;
+    width: 550px;
+    height: 500px;
     background-color: rgb(255, 255, 255);
     border: 2px solid rgb(228, 228, 228);
     border-radius: 10px;
@@ -71,26 +71,36 @@
 .emailInput {
     padding-top: 15px;
     padding-bottom: 15px;
+    position: relative;
+    bottom: 30px;
 }
 
 .passwordInput {
     padding-top: 15px;
-    padding-bottom: 15px;
+    position: relative;
+    bottom: 30px;
 }
 
-.confirmedPasswordInput {
+.confirmPasswordInput {
     padding-top: 15px;
     padding-bottom: 15px;
+    position: relative;
+    bottom: 21px;
 }
 
 .nameInput {
     padding-top: 15px;
     padding-bottom: 15px;
+    position: relative;
+    bottom: 22px;
+
 }
 
 .lastnameInput {
     padding-top: 15px;
     padding-bottom: 15px;
+    position: relative;
+    bottom: 22px;
 }
 
 .registrationButton {

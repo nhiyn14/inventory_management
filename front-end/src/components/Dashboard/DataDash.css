@@ -18,17 +18,7 @@
     cursor: pointer;
     background-color: #1aa7ec;
 }
-/* .dashboardContents > div {
-    text-align: center;
-    padding-top: 10px;
-    border: 1px solid #000000;
-    border-radius: 10px;
-    width: 12%;
-    height: 100%px;
-    overflow: hidden;
-    cursor: pointer;
-    background-color: white;
-} */
+
 .menuCost {
     text-align: center;
     padding-top: 10px;
@@ -38,8 +28,7 @@
     height: 100%px;
     overflow: hidden;
     cursor: pointer;
-    background-color: #797ef6;
-    color: white;
+    background-color: white;
     font-size: 20px;
 }
 .menuName {
@@ -51,8 +40,7 @@
     height: 100%px;
     overflow: hidden;
     cursor: pointer;
-    background-color: #797ef6;
-    color: white;
+    background-color: white;
     font-size: 20px;
 }
 .menuRetail {
@@ -64,8 +52,7 @@
     height: 100%px;
     overflow: hidden;
     cursor: pointer;
-    background-color: #797ef6;
-    color: white;
+    background-color: white;
     font-size: 20px;
 }
 .menuQuantity {
@@ -77,8 +64,7 @@
     height: 100%px;
     overflow: hidden;
     cursor: pointer;
-    background-color: #797ef6;
-    color: white;
+    background-color: white;
     font-size: 20px;
 }
 .menuDescription {
@@ -90,8 +76,7 @@
     height: 100%px;
     overflow: hidden;
     cursor: pointer;
-    background-color: #797ef6;
-    color: white;
+    background-color: white;
     font-size: 13px;
 }
 .lowStock {
@@ -103,9 +88,20 @@
     height: 100%px;
     overflow: hidden;
     cursor: pointer;
-    background-color: #ffba4a;
-    color: white;
-    font-size: 13px;
+    background-color: #ff9500;
+    font-size: 20px;
+}
+.noStock {
+    text-align: center;
+    padding-top: 10px;
+    border: 1px solid #000000;
+    border-radius: 10px;
+    width: 12%;
+    height: 100%px;
+    overflow: hidden;
+    cursor: pointer;
+    background-color: #ff0000;
+    font-size: 20px;
 }
 .dashboardContents :hover {
     opacity: 0.8;

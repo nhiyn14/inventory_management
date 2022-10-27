@@ -30,9 +30,10 @@ function DashboardForm({ onDashFormSubmission }) {
             <div className="dashboardInputs">
                 <div className="productName">
                     <TextField
+                    InputLabelProps={{shrink: false}}
                     sx={{border: '1px solid black'}}
                     className="textField"
-                        label="Product name"
+                        label={dashBoardFormValues['product_description'] === "" ? "Product name" : ""}
                         color="primary"
                         fullWidth
                         required
@@ -47,10 +48,11 @@ function DashboardForm({ onDashFormSubmission }) {
                 </div>
                 <div className="productWholesalePrice">
                     <TextField
+                    InputLabelProps={{shrink: false}}
                     sx={{border: '1px solid black'}}
                     className="textField"
                         id="outlined-basic"
-                        label="Wholesale price"
+                        label={dashBoardFormValues["price_wholesale"] === "" ? "Cost price" : ""}
                         variant="outlined"
                         type="number"
                         required
@@ -66,10 +68,11 @@ function DashboardForm({ onDashFormSubmission }) {
                 <div></div>
                 <div className="productRetailPrice">
                     <TextField
+                    InputLabelProps={{shrink: false}}
                     sx={{border: '1px solid black'}}
                     className="textField"
                         id="outlined-basic"
-                        label="Retail price"
+                        label={dashBoardFormValues["price_retail"] === "" ? "Retail price" : ""}
                         variant="outlined"
                         type="number"
                         required
@@ -84,10 +87,11 @@ function DashboardForm({ onDashFormSubmission }) {
                 </div>
                 <div className="productQuantity">
                     <TextField
+                    InputLabelProps={{shrink: false}}
                     sx={{border: '1px solid black'}}
                     className="textField"
                         id="outlined-basic"
-                        label="Quantity"
+                        label={dashBoardFormValues["quantity"] === "" ? "Quantity" : ""}
                         variant="outlined"
                         type="number"
                         required
@@ -102,10 +106,11 @@ function DashboardForm({ onDashFormSubmission }) {
                 </div>
                 <div className="product_description">
                     <TextField
+                    InputLabelProps={{shrink: false}}
                     sx={{border: '1px solid black'}}
                     className="textField"
                         id="outlined-basic"
-                        label="Description"
+                        label={dashBoardFormValues["product_description"] === "" ? "Description" : ""}
                         variant="outlined"
                         required
                         fullWidth

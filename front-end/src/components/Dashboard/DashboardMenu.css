@@ -1,6 +1,13 @@
 .dashboard {
-    height: 100%;
+
     width: 100%;
+}
+.dashBody{
+    overflow: hidden;
+}
+.dashMenu {
+    position: absolute;
+    top: -120px;
 }
 
 .dashContainer {
@@ -26,7 +33,7 @@
 .textField{
     background-color: white;
     border-radius: 10px;
-    border: 2px solid #0080ff; 
+
 }
 .textfield {
     background-color: white;
@@ -101,13 +108,13 @@
 }
 .removeInput {
     position: relative;
-    right: -80px;
+    right: -90px;
     bottom: -8px;
 }
 
 .removeProductButton {
     position: relative;
-    bottom: -15px;
+    bottom: -13px;
     right: -140px;
 }
 .productName {
@@ -152,8 +159,20 @@
     background-color: #1aa7ec;
 }
 p {
-    font-size: 20px;
+    font-size: 25px;
 }
+.dashProductWholesalePrice > p {
+    position: relative;
+    right: -20px;
+} 
+.dashProductRetailPrice > p {
+    position: relative;
+    right: -39px;
+} 
+.dashProductQuantity > p {
+    position: relative;
+    right: -39px;
+} 
 .dashHeader {
     display: flex;
     width: 100%;
@@ -179,6 +198,6 @@ p {
 }
 .updateButton {
     position: relative;
-    bottom: -8px;
+    bottom: -3px;
     right: 115px;
 }

@@ -24,12 +24,12 @@ export default function LoginUI() {
     });
     const logMeIn = async (event) => {
         try {
-            if (loginValues['email'] || loginValues['password'] === ""){
+            const response = await AxiosInstance.post("/login", loginValues);
+            if (response.status_code === 500){
                 setEmailError(true)
                 setPasswordError(true)
-                setApiError("Whoops! You've forgotten to enter your details")
+                setApiError("Whoops! Please check your login details")
             }
-            const response = await AxiosInstance.post("/login", loginValues);
             if (response.status_code === 400){
                 setApiError("Whoops! Incorrect email or password")
             }

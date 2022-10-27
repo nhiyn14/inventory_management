@@ -2,6 +2,7 @@ import React from "react";
 import './DataDash.css'
 
 function DataDash(props) {
+
     return (
         <div className="containerDash">
         <div className="dashboardContents">
@@ -14,7 +15,8 @@ function DataDash(props) {
             <div className="menuRetail">
                 {props.productRetailPrice}
             </div>
-            <div className="menuQuantity">
+            <div className={(props.productQuantity < 10 && props.productQuantity > 1 ? 'lowStock' : props.productQuantity === 0 ? 'noStock' : 'menuQuantity')}>
+            
                 {props.productQuantity}
             </div>
             <div className="menuDescription">

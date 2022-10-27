@@ -19,12 +19,11 @@ import { useEffect } from "react";
 import AxiosInstance from "../../AxiosInstance/Instances";
 import { makeStyles } from "@mui/styles";
 
-
 const useStyles = makeStyles({
     input: {
         backgroundColor: "white",
         borderRadius: "10px",
-        border: "1px solid black"
+        border: "1px solid black",
     },
 });
 
@@ -33,7 +32,6 @@ const token = sessionStorage.getItem("token");
 function DashboardMenu(props) {
     const navigate = useNavigate();
     const styles = useStyles();
-
 
     const [updateFormValues, setUpdateFormValues] = useState({
         price_wholesale: "",
@@ -78,6 +76,7 @@ function DashboardMenu(props) {
         } finally {
             setDashLoading(false);
             populateDashMenu();
+            setUpdateFormValues("");
         }
         console.log(updateFormValues);
     };
@@ -132,7 +131,7 @@ function DashboardMenu(props) {
             populateDashMenu();
         }
     };
-        const removeProductHandler = async (e) => {
+    const removeProductHandler = async (e) => {
         const findKey = productData.findIndex((key) => {
             return key.product_name === removeProduct;
         });
@@ -211,7 +210,8 @@ function DashboardMenu(props) {
                             </div>
                             <div className="totalSales">
                                 <TextField
-                                sx={{border: '1px solid black'}}
+                                    InputLabelProps={{ shrink: false }}
+                                    sx={{ border: "1px solid black" }}
                                     className={styles.input}
                                     value={salesData["totalSales"]}
                                     onChange={(e) => {
@@ -220,7 +220,11 @@ function DashboardMenu(props) {
                                             totalSales: e.target.value,
                                         });
                                     }}
-                                    label="Total sales"
+                                    label={
+                                        salesData["totalSales"] === ""
+                                            ? "Add sales"
+                                            : ""
+                                    }
                                     type="number"
                                 />
                                 <Button
@@ -234,42 +238,38 @@ function DashboardMenu(props) {
                         </div>
                         <div className="dashRemove">
                             <div className="removeInput">
-                            <FormControl fullWidth>
-                                <InputLabel>
-                                    Remove products
-                                </InputLabel>
-                                <Select
-                                    sx={{border: '1px solid black'}}
-                                    className="textfield"
-                                    label="Remove products"
-                                    value={removeProduct["product_name"]}
-                                    onChange={(e) => {
-                                        setRemoveProduct({
-                                            product_name: e.target.value,
-                                        });
-                                    }}
-                                >
-                                    {productData.map((data) => (
-                                        <MenuItem
-                                            value={data.product_name}
-                                            key={data.product_id}
-                                        >
-                                            {data.product_name}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                </FormControl>
-                                </div>
-                                <div className="removeProductButton">
-                                    <Button
-                                        variant="contained"
-                                        onClick={removeProductHandler}
+                                <FormControl fullWidth>
+                                    <InputLabel>Remove products</InputLabel>
+                                    <Select
+                                        sx={{ border: "1px solid black" }}
+                                        className="textfield"
+                                        label="Remove products"
+                                        value={removeProduct["product_name"]}
+                                        onChange={(e) => {
+                                            setRemoveProduct({
+                                                product_name: e.target.value,
+                                            });
+                                        }}
                                     >
-                                        Remove item
-                                    </Button>
-                                </div>
-                            
-                            
+                                        {productData.map((data) => (
+                                            <MenuItem
+                                                value={data.product_name}
+                                                key={data.product_id}
+                                            >
+                                                {data.product_name}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </div>
+                            <div className="removeProductButton">
+                                <Button
+                                    variant="contained"
+                                    onClick={removeProductHandler}
+                                >
+                                    Remove item
+                                </Button>
+                            </div>
                         </div>
                         <div className="container">
                             <div className="updateInputs">
@@ -306,10 +306,17 @@ function DashboardMenu(props) {
                                 </div>
                                 <div className="productWholesalePrice">
                                     <TextField
-                                    sx={{border: '1px solid black'}}
+                                        InputLabelProps={{ shrink: false }}
+                                        sx={{ border: "1px solid black" }}
                                         className={styles.input}
                                         id="outlined-basic"
-                                        label="Wholesale price"
+                                        label={
+                                            updateFormValues[
+                                                "price_wholesale"
+                                            ] === ""
+                                                ? "Cost price"
+                                                : ""
+                                        }
                                         variant="outlined"
                                         type="number"
                                         value={
@@ -326,10 +333,16 @@ function DashboardMenu(props) {
                                 <div></div>
                                 <div className="productRetailPrice">
                                     <TextField
-                                    sx={{border: '1px solid black'}}
+                                        InputLabelProps={{ shrink: false }}
+                                        sx={{ border: "1px solid black" }}
                                         className={styles.input}
                                         id="outlined-basic"
-                                        label="Retail price"
+                                        label={
+                                            updateFormValues["price_retail"] ===
+                                            ""
+                                                ? "Retail price"
+                                                : ""
+                                        }
                                         variant="outlined"
                                         type="number"
                                         value={updateFormValues["price_retail"]}
@@ -343,10 +356,15 @@ function DashboardMenu(props) {
                                 </div>
                                 <div className="productQuantity">
                                     <TextField
-                                    sx={{border: '1px solid black'}}
+                                        InputLabelProps={{ shrink: false }}
+                                        sx={{ border: "1px solid black" }}
                                         className={styles.input}
                                         id="outlined-basic"
-                                        label="Quantity"
+                                        label={
+                                            updateFormValues["quantity"] === ""
+                                                ? "Quantity"
+                                                : ""
+                                        }
                                         variant="outlined"
                                         type="number"
                                         value={updateFormValues["quantity"]}
@@ -360,10 +378,17 @@ function DashboardMenu(props) {
                                 </div>
                                 <div className="product_description">
                                     <TextField
-                                        sx={{border: '1px solid black'}}
+                                        InputLabelProps={{ shrink: false }}
+                                        sx={{ border: "1px solid black" }}
                                         className={styles.input}
                                         id="outlined-basic"
-                                        label="Description"
+                                        label={
+                                            updateFormValues[
+                                                "product_description"
+                                            ] === ""
+                                                ? "Description"
+                                                : ""
+                                        }
                                         variant="outlined"
                                         fullWidth
                                         multiline
