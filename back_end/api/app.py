@@ -43,7 +43,7 @@ def create_token():
     hashedPassword = hashlib.md5(password.encode()).hexdigest()
     # check if this user exist
     user = session.execute(select(User).where(User.email == email)).fetchone()
-    if user[0].email is None or user[0].email != email:
+    if user is None or user[0].email != email:
         return {"msg": "Incorrect email"}, 400
     else:
         if user[0].password != hashedPassword:
@@ -336,6 +336,7 @@ def post_report_1():
         # retrieve name of the product
         product_name = each.product_name
         product_id = each.id
+        remain_quantity = each.quantity
         sold_quantity = 0
         total_profit = 0
         # retrieve all sales of the same products
@@ -346,9 +347,12 @@ def post_report_1():
         for each in all_sales:
             sold_quantity = sold_quantity + each.quantity
             total_profit = total_profit + each.profit
+            total_revenue = total_revenue + each.revenue
         # create a new dict for each product
         product = {"product_name": product_name,
                    "sold_quantity": sold_quantity,
+                   "remain_quantity": remain_quantity,
+                   "total_revenue": total_revenue,
                    "total_profit": total_profit}
         reportList.append(product)
     return (reportList)
