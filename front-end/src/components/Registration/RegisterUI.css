@@ -20,6 +20,8 @@
     justify-content: right;
     padding-left: 135px;
     padding: 100px;
+    position: relative;
+
 }
 
 .welcomeText {
@@ -27,6 +29,7 @@
     padding-top: 300px;
     padding-left: 190px;
     position: relative;
+
 }
 
 .welcomeText>h1 {
@@ -52,6 +55,8 @@
     box-shadow: 0px 0px 23px 1px #000000;
     margin-top: 235px;
     padding-bottom: 0px;
+    position: relative;
+    bottom: 80px;
 
 }
 
