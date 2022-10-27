@@ -2,35 +2,64 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BarChart, Legend, CartesianGrid, XAxis, YAxis } from "recharts";
 import { Bar, Tooltip } from "recharts";
-import TextField from '@mui/material/TextField';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import AxiosInstance from "../../AxiosInstance/Instances";
 import "./Reporting.css";
 
 function Reporting() {
     const [chartData, setChartData] = useState([]);
-    const [dateValue, setDateValue] = useState({
-      dateStart: "",
-      dateEnd: "",
-    })
+    const data = [
+        {
+            name: "Page A",
+            uv: 4000,
+            pv: 2400,
+        },
+        {
+            name: "Page B",
+            uv: 3000,
+            pv: 1398,
+        },
+        {
+            name: "Page C",
+            uv: 2000,
+            pv: 9800,
+        },
+        {
+            name: "Page D",
+            uv: 2780,
+            pv: 3908,
+        },
+        {
+            name: "Page E",
+            uv: 1890,
+            pv: 4800,
+        },
+        {
+            name: "Page F",
+            uv: 2390,
+            pv: 3800,
+        },
+        {
+            name: "Page G",
+            uv: 3490,
+            pv: 4300,
+        },
+    ];
 
     const populateChart = async () => {
         try {
-            const response = await AxiosInstance.get("/report1");
+            const response = await AxiosInstance.get("/dashboard");
             const apiData = response.data.map((data) => ({
                 Name: data.product_name,
-                Movements: data.sold_quantity,
-                Profit: data.total_profit,
+                Retail: data.price_retail,
+                Cost: data.price_wholesale,
             }));
-            const initialChartData = [];
+            const initialChartData = []
             for (const objects in apiData) {
                 let parsedData = apiData[objects];
-                initialChartData.push(parsedData);
+                initialChartData.push(parsedData)
                 console.log(initialChartData);
             }
-            setChartData(initialChartData);
+            setChartData(initialChartData)
         } catch (error) {
             console.log(error);
         }
@@ -40,35 +69,6 @@ function Reporting() {
     }, []);
     return (
         <div className="reportBody">
-          <div className="datePickers">
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                    label="Basic example"
-                    value={dateValue['dateStart']}
-                    onChange={(e) => {
-                        setDateValue({
-                          ...dateValue,
-                          dateStart: e.target.value
-                        })
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                />
-            </LocalizationProvider>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                    label="Basic example"
-                    value={dateValue['dateEnd']}
-                    onChange={(e) => {
-                        setDateValue({
-                          ...dateValue,
-                          dateEnd: e.target.value
-                        })
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                />
-            </LocalizationProvider>
-            
-            </div>
             <div className="reportChart">
                 <BarChart width={730} height={250} data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -76,8 +76,8 @@ function Reporting() {
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="Movements" fill="#8884d8" />
-                    <Bar dataKey="Profit" fill="#82ca9d" />
+                    <Bar dataKey="Retail" fill="#8884d8" />
+                    <Bar dataKey="Cost" fill="#82ca9d" />
                 </BarChart>
             </div>
         </div>
