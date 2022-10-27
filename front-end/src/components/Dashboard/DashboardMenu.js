@@ -184,7 +184,7 @@ function DashboardMenu(props) {
                         <div className="dashSales">
                             <div className="salesName">
                                 <FormControl fullWidth>
-                                    <InputLabel>Add sales</InputLabel>
+                                    <InputLabel></InputLabel>
                                     <Select
                                         className={styles.input}
                                         label="Add sales"
@@ -239,7 +239,7 @@ function DashboardMenu(props) {
                         <div className="dashRemove">
                             <div className="removeInput">
                                 <FormControl fullWidth>
-                                    <InputLabel>Remove products</InputLabel>
+                                    <InputLabel></InputLabel>
                                     <Select
                                         sx={{ border: "1px solid black" }}
                                         className="textfield"
@@ -275,8 +275,10 @@ function DashboardMenu(props) {
                             <div className="updateInputs">
                                 <div className="productName">
                                     <FormControl fullWidth>
-                                        <InputLabel>Add sales</InputLabel>
+                                        <InputLabel
+                                        ></InputLabel>
                                         <Select
+                                            InputLabelProps={{ shrink: false }}
                                             className={styles.input}
                                             label="Update products"
                                             value={

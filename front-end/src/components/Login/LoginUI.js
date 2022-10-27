@@ -25,6 +25,7 @@ export default function LoginUI() {
     const logMeIn = async (event) => {
         try {
             const response = await AxiosInstance.post("/login", loginValues);
+            console.log("after api call response");
             if (response.status_code === 500){
                 setEmailError(true)
                 setPasswordError(true)
@@ -37,6 +38,7 @@ export default function LoginUI() {
             AxiosInstance.defaults.headers["Authorization"] = `Bearer ${response.data.access_token}`;
             navigate("/dashboard");
         } catch (error) {
+            console.log("in catching error");
             console.log(error);
         } finally {
             setLoginValues({
@@ -44,6 +46,7 @@ export default function LoginUI() {
                 password: "",
             });
         }
+        console.log(loginValues);
 
 
         event.preventDefault();
