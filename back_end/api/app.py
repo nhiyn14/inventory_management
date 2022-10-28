@@ -27,6 +27,7 @@ dashboardList = []
 newList = []
 updateList = []
 deleteList = []
+reportList = []
 
 
 @app.route('/login', methods=['POST'])
@@ -36,13 +37,12 @@ def create_token():
     loginValues = loginData
     loginList.clear()
     loginList.append(loginValues)
-
     email = loginValues['email']
     password = loginValues['password']
     hashedPassword = hashlib.md5(password.encode()).hexdigest()
     # check if this user exist
     user = session.execute(select(User).where(User.email == email)).fetchone()
-    if user[0].email is None or user[0].email != email:
+    if user is None or user[0].email != email:
         return {"msg": "Incorrect email"}, 400
     else:
         if user[0].password != hashedPassword:
@@ -96,6 +96,7 @@ def get_registration():
 def get_dashboard():
     """posts data from dashboard form"""
     dashboardList.clear()
+    # retrieve current user_id
     user_id = get_jwt_identity()
     for each in session.query(Product).where(Product.user_id == user_id):
         product = each.__dict__
@@ -110,11 +111,10 @@ def get_dashboard():
 def post_new_product():
     """create a new product in db"""
     newValues = request.get_json()
-    # newValues = newData['newItemValue']
     newList.clear()
     newList.append(newValues)
 
-    # user_id just for testing purpose
+    # retrieve current user_id
     user_id = get_jwt_identity()
     product_name = newValues['product_name']
     price_wholesale = newValues['price_wholesale']
@@ -161,7 +161,7 @@ def post_updateproduct():
     updateList.append(updateValues)
 
     product_name = updateValues['product_name']
-    # user_id just for testing purpose
+    # retrieve current user_id
     user_id = get_jwt_identity()
 
     existedProduct = session.execute(select(Product).where(
@@ -232,6 +232,7 @@ def post_delete_product():
     deleteList.append(deleteData)
 
     product_name = deleteData['product_name']
+    # retrieve current user_id
     user_id = get_jwt_identity()
 
     existedProduct = session.execute(select(Product).where(
@@ -266,10 +267,10 @@ def get_delete_product():
 def post_new_sales():
     """create a new sales in db"""
     newSaleValues = request.get_json()
-    # user_id just for testing purpose
-    user_id = get_jwt_identity()
     product_name = newSaleValues['salesName']
     quantity = newSaleValues['totalSales']
+    # retrieve current user_id
+    user_id = get_jwt_identity()
 
     existedProduct = session.execute(select(Product).where(
         (Product.user_id == user_id) &
@@ -319,6 +320,37 @@ def post_new_sales():
 def get_new_sales():
     """return information of the new sales"""
     return json.dumps(newList, indent=4, default=str)
+
+
+@app.route('/report1', methods=['GET'])
+@jwt_required()
+def post_report_1():
+    """return sold quantity + profit per product per month"""
+    reportList.clear()
+    # retrieve current user_id
+    user_id = get_jwt_identity()
+    # retrieve all products belong to the user
+    all_product = session.query(Product).where(Product.user_id == user_id)
+    for each in all_product:
+        # retrieve name of the product
+        product_name = each.product_name
+        product_id = each.id
+        sold_quantity = 0
+        total_profit = 0
+        # retrieve all sales of the same products
+        all_sales = session.query(Sales).where(
+            (Sales.user_id == user_id) &
+            (Sales.product_id == product_id))
+        # calculate sold_quantity and total_profit of the product
+        for each in all_sales:
+            sold_quantity = sold_quantity + each.quantity
+            total_profit = total_profit + each.profit
+        # create a new dict for each product
+        product = {"product_name": product_name,
+                   "sold_quantity": sold_quantity,
+                   "total_profit": total_profit}
+        reportList.append(product)
+    return (reportList)
 
 
 if __name__ == "__main__":

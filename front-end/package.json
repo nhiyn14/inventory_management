@@ -9,15 +9,18 @@
     "@mui/material": "^5.10.9",
     "@mui/styles": "^5.10.10",
     "@mui/x-data-grid": "^5.17.7",
+    "@mui/x-date-pickers": "^5.0.5",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.27.2",
+    "dayjs": "^1.11.6",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.2",
     "react-scripts": "5.0.1",
+    "recharts": "^2.1.15",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

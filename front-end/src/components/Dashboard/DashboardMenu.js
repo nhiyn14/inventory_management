@@ -6,7 +6,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import DataDash from "./DataDash";
 import CircularProgress from "@mui/material/CircularProgress";
-
+import Switch from "@mui/material/Switch";
 import {
     TextField,
     FormControl,
@@ -18,6 +18,8 @@ import Button from "@mui/material/Button";
 import { useEffect } from "react";
 import AxiosInstance from "../../AxiosInstance/Instances";
 import { makeStyles } from "@mui/styles";
+import Reporting from "../Reporting/Reporting";
+import { gridVisibleTopLevelRowCountSelector } from "@mui/x-data-grid";
 
 const useStyles = makeStyles({
     input: {
@@ -30,6 +32,8 @@ const useStyles = makeStyles({
 const token = sessionStorage.getItem("token");
 
 function DashboardMenu(props) {
+    const [switchText, setSwitchText] = useState("Generate Report")
+    const [renderChart, setRenderChart] = useState(false);
     const navigate = useNavigate();
     const styles = useStyles();
 
@@ -48,6 +52,14 @@ function DashboardMenu(props) {
         salesName: "",
         totalSales: "",
     });
+    const chartHandler = (e) => {
+        setRenderChart(e.target.checked)
+        if (renderChart === true){
+            setSwitchText("Generate report")
+        } else {
+            setSwitchText("Generate stock information")
+        }
+    }
     const addSalesHandler = async () => {
         try {
             const response = await AxiosInstance.post("/newsales", salesData);
@@ -184,7 +196,7 @@ function DashboardMenu(props) {
                         <div className="dashSales">
                             <div className="salesName">
                                 <FormControl fullWidth>
-                                    <InputLabel>Add sales</InputLabel>
+                                    <InputLabel></InputLabel>
                                     <Select
                                         className={styles.input}
                                         label="Add sales"
@@ -239,7 +251,7 @@ function DashboardMenu(props) {
                         <div className="dashRemove">
                             <div className="removeInput">
                                 <FormControl fullWidth>
-                                    <InputLabel>Remove products</InputLabel>
+                                    <InputLabel></InputLabel>
                                     <Select
                                         sx={{ border: "1px solid black" }}
                                         className="textfield"
@@ -275,7 +287,7 @@ function DashboardMenu(props) {
                             <div className="updateInputs">
                                 <div className="productName">
                                     <FormControl fullWidth>
-                                        <InputLabel>Add sales</InputLabel>
+                                        <InputLabel></InputLabel>
                                         <Select
                                             className={styles.input}
                                             label="Update products"
@@ -417,9 +429,17 @@ function DashboardMenu(props) {
                                 </div>
                             </div>
                         </div>
+                        <div className="renderChart">
+                        <Switch className="chartSwitch"
+                        color="secondary"
+                        size="large"
+                        checked={renderChart}
+                        onChange={chartHandler}/>
+                        <p>{switchText}</p>
+                        </div>
                     </div>
                     <div className="dashMenu">
-                        <div className="menuHeader">
+                        {renderChart === false ? <div className="menuHeader">
                             <div className="dashProductName">
                                 <p>Name</p>
                             </div>
@@ -435,9 +455,8 @@ function DashboardMenu(props) {
                             <div className="dashproductDescription">
                                 <p>Description</p>
                             </div>
-                        </div>
-                        {/* returning new productData array, where every dashValue is input into a DataDash component */}
-                        {productData.map((dashValues) => (
+                        </div> : null}
+                        {renderChart === true ? <Reporting/> : productData.map((dashValues) => (
                             <DataDash
                                 productID={dashValues.productID}
                                 productType={dashValues.productType}
