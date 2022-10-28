@@ -19,7 +19,6 @@ import { useEffect } from "react";
 import AxiosInstance from "../../AxiosInstance/Instances";
 import { makeStyles } from "@mui/styles";
 import Reporting from "../Reporting/Reporting";
-import { gridVisibleTopLevelRowCountSelector } from "@mui/x-data-grid";
 
 const useStyles = makeStyles({
     input: {
@@ -29,10 +28,7 @@ const useStyles = makeStyles({
     },
 });
 
-const token = sessionStorage.getItem("token");
-
 function DashboardMenu(props) {
-    const [switchText, setSwitchText] = useState("Generate Report")
     const [renderChart, setRenderChart] = useState(false);
     const navigate = useNavigate();
     const styles = useStyles();
@@ -53,13 +49,8 @@ function DashboardMenu(props) {
         totalSales: "",
     });
     const chartHandler = (e) => {
-        setRenderChart(e.target.checked)
-        if (renderChart === true){
-            setSwitchText("Generate report")
-        } else {
-            setSwitchText("Generate stock information")
-        }
-    }
+        setRenderChart(e.target.checked);
+    };
     const addSalesHandler = async () => {
         try {
             const response = await AxiosInstance.post("/newsales", salesData);
@@ -82,7 +73,6 @@ function DashboardMenu(props) {
                 "/updateproduct",
                 updateFormValues
             );
-            console.log(response);
         } catch (error) {
             console.log(error);
         } finally {
@@ -90,7 +80,6 @@ function DashboardMenu(props) {
             populateDashMenu();
             setUpdateFormValues("");
         }
-        console.log(updateFormValues);
     };
     const logMeOut = () => {
         setLogOutLoading(true);
@@ -127,16 +116,12 @@ function DashboardMenu(props) {
         populateDashMenu();
     }, []);
 
-    // addProduct data takes dashboardValues as a parameter (this parameter will be used in DashboardForm.js)
     const addProductData = async (newItemValue) => {
-        console.log(newItemValue);
-        console.log(productData);
         try {
             const response = await AxiosInstance.post(
                 "/newproduct",
                 newItemValue
             );
-            console.log(response);
         } catch (error) {
             console.log(error);
         } finally {
@@ -154,7 +139,6 @@ function DashboardMenu(props) {
                 "/deleteproduct",
                 removeProduct
             );
-            console.log(response);
         } catch (error) {
             console.log(error);
         } finally {
@@ -162,7 +146,6 @@ function DashboardMenu(props) {
             populateDashMenu();
             setRemoveProduct("");
         }
-        console.log(removeProduct);
     };
 
     return (
@@ -188,7 +171,6 @@ function DashboardMenu(props) {
                     <div className="dashEditing">
                         <div className="dashForm">
                             <DashboardForm
-                                // onDashFormSubmission will be used in dashform.js as a pointer to addproductdata function
                                 onDashFormSubmission={addProductData}
                             />
                         </div>
@@ -430,48 +412,56 @@ function DashboardMenu(props) {
                             </div>
                         </div>
                         <div className="renderChart">
-                        <Switch className="chartSwitch"
-                        color="secondary"
-                        size="large"
-                        checked={renderChart}
-                        onChange={chartHandler}/>
-                        <p>{switchText}</p>
+                            <Switch
+                                className="chartSwitch"
+                                color="secondary"
+                                size="large"
+                                checked={renderChart}
+                                onChange={chartHandler}
+                            />
+                            <p>Generate report</p>
                         </div>
                     </div>
                     <div className="dashMenu">
-                        {renderChart === false ? <div className="menuHeader">
-                            <div className="dashProductName">
-                                <p>Name</p>
+                        {renderChart === false ? (
+                            <div className="menuHeader">
+                                <div className="dashProductName">
+                                    <p>Name</p>
+                                </div>
+                                <div className="dashProductWholesalePrice">
+                                    <p>Cost</p>
+                                </div>
+                                <div className="dashProductRetailPrice">
+                                    <p>Retail</p>
+                                </div>
+                                <div className="dashProductQuantity">
+                                    <p>Quantity</p>
+                                </div>
+                                <div className="dashproductDescription">
+                                    <p>Description</p>
+                                </div>
                             </div>
-                            <div className="dashProductWholesalePrice">
-                                <p>Cost</p>
-                            </div>
-                            <div className="dashProductRetailPrice">
-                                <p>Retail</p>
-                            </div>
-                            <div className="dashProductQuantity">
-                                <p>Quantity</p>
-                            </div>
-                            <div className="dashproductDescription">
-                                <p>Description</p>
-                            </div>
-                        </div> : null}
-                        {renderChart === true ? <Reporting/> : productData.map((dashValues) => (
-                            <DataDash
-                                productID={dashValues.productID}
-                                productType={dashValues.productType}
-                                productWholesalePrice={
-                                    dashValues.price_wholesale
-                                }
-                                productRetailPrice={dashValues.price_retail}
-                                productQuantity={dashValues.quantity}
-                                productDescription={
-                                    dashValues.product_description
-                                }
-                                productName={dashValues.product_name}
-                                key={dashValues.product_id}
-                            />
-                        ))}
+                        ) : null}
+                        {renderChart === true ? (
+                            <Reporting />
+                        ) : (
+                            productData.map((dashValues) => (
+                                <DataDash
+                                    productID={dashValues.productID}
+                                    productType={dashValues.productType}
+                                    productWholesalePrice={
+                                        dashValues.price_wholesale
+                                    }
+                                    productRetailPrice={dashValues.price_retail}
+                                    productQuantity={dashValues.quantity}
+                                    productDescription={
+                                        dashValues.product_description
+                                    }
+                                    productName={dashValues.product_name}
+                                    key={dashValues.product_id}
+                                />
+                            ))
+                        )}
                         {dashLoading === true ? (
                             <CircularProgress
                                 className="dashLoading"

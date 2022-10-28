@@ -83,7 +83,7 @@
 .logoutIcon {
     position: absolute;
     right: 40px;
-    padding-top: 10px;
+    padding-top: 5px;
     cursor: pointer;
 }
 .logLoading {
@@ -92,7 +92,9 @@
     bottom: 29px;
 }
 .logoutIcon > p {
-    padding-right: 35px;
+    padding-right: 30px;
+    position: relative;
+    bottom: 5px;
 }
 .logoutIcon :hover {
     opacity: 0.7;
