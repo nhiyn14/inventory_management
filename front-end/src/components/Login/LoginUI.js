@@ -25,21 +25,15 @@ export default function LoginUI() {
     const logMeIn = async (event) => {
         try {
             const response = await AxiosInstance.post("/login", loginValues);
-            console.log("after api call response");
-            if (response.status_code === 500){
-                setEmailError(true)
-                setPasswordError(true)
-                setApiError("Whoops! Please check your login details")
-            }
-            if (response.status_code === 400){
-                setApiError("Whoops! Incorrect email or password")
-            }
             sessionStorage.setItem("token", response.data.access_token);
             AxiosInstance.defaults.headers["Authorization"] = `Bearer ${response.data.access_token}`;
             navigate("/dashboard");
         } catch (error) {
-            console.log("in catching error");
-            console.log(error);
+            if (error.response.status === 400){
+                setApiError("Whoops! Please check your login details")
+                setEmailError(true)
+                setPasswordError(true)
+            }
         } finally {
             setLoginValues({
                 email: "",
@@ -80,6 +74,7 @@ export default function LoginUI() {
                                                 ...loginValues,
                                                 email: e.target.value,
                                             });
+                                            setEmailError(false)
                                         }}
                                         label="Email"
                                         color="primary"
@@ -98,6 +93,7 @@ export default function LoginUI() {
                                                 ...loginValues,
                                                 password: e.target.value,
                                             });
+                                            setPasswordError(false)
                                         }}
                                         label="Password"
                                         color="primary"
@@ -106,7 +102,7 @@ export default function LoginUI() {
                                         required
                                         error={passwordError}
                                     />
-                                    <p>{apiError}</p>
+                                    <p className="apiError">{apiError}</p>
                                 </div>
                             </div>
                             <div className="loginButton">

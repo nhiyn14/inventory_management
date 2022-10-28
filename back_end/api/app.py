@@ -347,8 +347,8 @@ def post_report_1():
             total_profit = total_profit + each.profit
         # create a new dict for each product
         product = {"product_name": product_name,
-                    "sold_quantity": sold_quantity,
-                    "total_profit": total_profit}
+                   "sold_quantity": sold_quantity,
+                   "total_profit": total_profit}
         reportList.append(product)
     return (reportList)
 
