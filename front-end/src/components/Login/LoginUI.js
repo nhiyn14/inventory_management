@@ -15,7 +15,6 @@ console.log("this is your token", token);
 export default function LoginUI() {
     const navigate = useNavigate();
     const [apiError, setApiError] = useState("")
-    const [isLoading, setIsLoading] = useState(false);
     const [emailError, setEmailError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
     const [loginValues, setLoginValues] = useState({
@@ -51,9 +50,6 @@ export default function LoginUI() {
             <header>
                 <AssessmentIcon sx={{ fontSize: 80 }} />
                 <h1>StockMate.</h1>
-                {isLoading === true ? (
-                    <CircularProgress className="loadingBar" size={80} />
-                ) : null}
             </header>
             <div className="indexBody">
                 <div className="loginContainer">

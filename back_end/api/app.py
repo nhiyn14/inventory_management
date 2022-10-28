@@ -338,6 +338,7 @@ def post_report_1():
         remain_quantity = each.quantity
         sold_quantity = 0
         total_profit = 0
+        total_revenue = 0
         # retrieve all sales of the same products
         all_sales = session.query(Sales).where(
             (Sales.user_id == user_id) &

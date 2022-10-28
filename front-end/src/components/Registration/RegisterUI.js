@@ -3,15 +3,14 @@ import "./RegisterUI.css";
 import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
 import { Link } from "react-router-dom";
-import AssessmentIcon from '@mui/icons-material/Assessment';
-import { CircularProgress } from '@mui/material';
+import AssessmentIcon from "@mui/icons-material/Assessment";
 import AxiosInstance from "../../AxiosInstance/Instances";
-import { useNavigate } from "react-router-dom";
+
 
 
 export default function RegisterUI() {
-    const navigate = useNavigate()
-    const [isLoading, setIsLoading] = useState(false)
+    const [textfieldError, setTextfieldError] = useState(false);
+    const [helperText, setHelperText] = useState("");
     const [registrationValues, setRegistrationValues] = useState({
         email: "",
         password: "",
@@ -22,12 +21,19 @@ export default function RegisterUI() {
 
     const submitHandler = async (e) => {
         try {
-            const response = await AxiosInstance.post('/registration', registrationValues)
-            console.log(response);
+            const response = await AxiosInstance.post(
+                "/registration",
+                registrationValues
+            );
+            if (response.status === 200) {
+                setHelperText("New account created!");
+            }
         } catch (error) {
-            console.log(error);
+            if (error.request.status === 409) {
+                setHelperText("Oops! Please re-check your details");
+                setTextfieldError(true);
+            }
         } finally {
-            navigate('/')
             setRegistrationValues({
                 email: "",
                 password: "",
@@ -40,9 +46,8 @@ export default function RegisterUI() {
     return (
         <div>
             <header>
-            <AssessmentIcon sx={{fontSize: 80}}/>
-                <h1>StockMate.</h1> 
-                {isLoading === true ? <CircularProgress className="loadingBar" size={80}/> : null}
+                <AssessmentIcon sx={{ fontSize: 80 }} />
+                <h1>StockMate.</h1>
             </header>
             <div className="indexBody">
                 <div className="registrationContainer">
@@ -62,6 +67,8 @@ export default function RegisterUI() {
                                                 ...registrationValues,
                                                 email: e.target.value,
                                             });
+                                            setTextfieldError(false);
+                                            setHelperText("");
                                         }}
                                         label="Email"
                                         color="primary"
@@ -69,6 +76,7 @@ export default function RegisterUI() {
                                         fullWidth
                                         size="small"
                                         required
+                                        error={textfieldError}
                                     />
                                 </div>
                                 <div className="passwordInput">
@@ -87,6 +95,7 @@ export default function RegisterUI() {
                                         fullWidth
                                         size="small"
                                         required
+                                        error={textfieldError}
                                     />
                                 </div>
                                 <div className="confirmPasswordInput">
@@ -110,6 +119,7 @@ export default function RegisterUI() {
                                         fullWidth
                                         size="small"
                                         required
+                                        error={textfieldError}
                                     />
                                 </div>
                                 <div className="nameInput">
@@ -128,6 +138,7 @@ export default function RegisterUI() {
                                         size="small"
                                         required
                                         fullWidth
+                                        error={textfieldError}
                                     />
                                 </div>
                                 <div className="lastnameInput">
@@ -145,29 +156,30 @@ export default function RegisterUI() {
                                         size="small"
                                         required
                                         fullWidth
+                                        error={textfieldError}
                                     />
                                 </div>
                             </div>
+                            <p className="helperText">
+                                {helperText ? helperText : null}
+                            </p>
                             <div className="registrationButton">
                                 <Button
                                     variant="contained"
                                     onClick={submitHandler}
-                                    fullWidth={true}>
+                                    fullWidth={true}
+                                >
                                     Register
                                 </Button>
                             </div>
                             <p className="routeLink">
-                                <Link to="/">
-                                    Already have an account?
-                                </Link>
+                                <Link to="/">Already have an account?</Link>
                             </p>
                         </div>
                     </form>
                 </div>
             </div>
-            <footer className="indexFooter">
-                
-            </footer>
+            <footer className="indexFooter"></footer>
         </div>
     );
 }
